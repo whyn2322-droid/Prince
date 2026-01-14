@@ -1,223 +1,246 @@
+from __future__ import annotations
+
 import math
-from typing import Any, Dict, List
+import re
+from typing import Any, Dict, List, Optional, Text
 
-from rasa_sdk import Action, Tracker
-from rasa_sdk.events import SlotSet
+from rasa_sdk import Action, FormValidationAction, Tracker
+from rasa_sdk.events import AllSlotsReset, FollowupAction
 from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.types import DomainDict
+
+NUMBER_PATTERN = re.compile(r"-?\d+(?:[.,]\d+)?")
+
+SHAPE_SYNONYMS = {
+    "circle": {"circle", "тойрог", "тойргийн", "дугуй"},
+    "rectangle": {"rectangle", "тэгш өнцөгт", "тэгш өнцөгтийн"},
+    "square": {"square", "дөрвөлжин", "квадрат"},
+    "triangle": {"triangle", "гурвалжин", "гурвалжны"},
+}
+
+SHAPE_LABELS = {
+    "circle": "тойрог",
+    "rectangle": "тэгш өнцөгт",
+    "square": "дөрвөлжин",
+    "triangle": "гурвалжин",
+}
 
 
-def _parse_numbers(text: str) -> List[float]:
-    if not text:
-        return []
-    cleaned = []
-    allowed = set("0123456789.-")
-    for ch in text:
-        cleaned.append(ch if ch in allowed else " ")
-    numbers: List[float] = []
-    for part in "".join(cleaned).split():
-        try:
-            numbers.append(float(part))
-        except ValueError:
-            continue
-    return numbers
+def normalize_shape(value: Optional[Text]) -> Optional[Text]:
+    if not value:
+        return None
+    text = value.strip().lower()
+    for shape, synonyms in SHAPE_SYNONYMS.items():
+        if text == shape or text in synonyms:
+            return shape
+    for shape, synonyms in SHAPE_SYNONYMS.items():
+        for synonym in synonyms:
+            if synonym in text:
+                return shape
+    return None
 
 
-class ActionAskSquareSide(Action):
-    def name(self) -> str:
-        return "action_ask_square_side"
+def parse_positive_number(value: Any) -> Optional[float]:
+    if value is None:
+        return None
+    if isinstance(value, (int, float)):
+        number = float(value)
+    else:
+        match = NUMBER_PATTERN.search(str(value))
+        if not match:
+            return None
+        number = float(match.group(0).replace(",", "."))
+    if number <= 0:
+        return None
+    return number
+
+
+class ValidatePerimeterForm(FormValidationAction):
+    def name(self) -> Text:
+        return "validate_perimeter_form"
+
+    async def required_slots(
+        self,
+        slots_mapped_in_domain: List[Text],
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> List[Text]:
+        shape = normalize_shape(tracker.get_slot("shape"))
+        if shape == "circle":
+            return ["shape", "radius"]
+        if shape == "rectangle":
+            return ["shape", "width", "height"]
+        if shape == "square":
+            return ["shape", "square_side"]
+        if shape == "triangle":
+            return ["shape", "side_a", "side_b", "side_c"]
+        return ["shape"]
+
+    def validate_shape(
+        self,
+        value: Text,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        shape = normalize_shape(value)
+        if shape:
+            return {"shape": shape}
+        dispatcher.utter_message(response="utter_invalid_shape")
+        return {"shape": None}
+
+    def validate_radius(
+        self,
+        value: Text,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        number = parse_positive_number(value)
+        if number is not None:
+            return {"radius": number}
+        dispatcher.utter_message(response="utter_invalid_number")
+        return {"radius": None}
+
+    def validate_width(
+        self,
+        value: Text,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        number = parse_positive_number(value)
+        if number is not None:
+            return {"width": number}
+        dispatcher.utter_message(response="utter_invalid_number")
+        return {"width": None}
+
+    def validate_height(
+        self,
+        value: Text,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        number = parse_positive_number(value)
+        if number is not None:
+            return {"height": number}
+        dispatcher.utter_message(response="utter_invalid_number")
+        return {"height": None}
+
+    def validate_square_side(
+        self,
+        value: Text,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        number = parse_positive_number(value)
+        if number is not None:
+            return {"square_side": number}
+        dispatcher.utter_message(response="utter_invalid_number")
+        return {"square_side": None}
+
+    def validate_side_a(
+        self,
+        value: Text,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        number = parse_positive_number(value)
+        if number is not None:
+            return {"side_a": number}
+        dispatcher.utter_message(response="utter_invalid_number")
+        return {"side_a": None}
+
+    def validate_side_b(
+        self,
+        value: Text,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        number = parse_positive_number(value)
+        if number is not None:
+            return {"side_b": number}
+        dispatcher.utter_message(response="utter_invalid_number")
+        return {"side_b": None}
+
+    def validate_side_c(
+        self,
+        value: Text,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        number = parse_positive_number(value)
+        if number is not None:
+            return {"side_c": number}
+        dispatcher.utter_message(response="utter_invalid_number")
+        return {"side_c": None}
+
+
+class ActionCalculatePerimeter(Action):
+    def name(self) -> Text:
+        return "action_calculate_perimeter"
 
     def run(
         self,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
-        domain: Dict[str, Any],
-    ) -> List[Dict[str, Any]]:
-        dispatcher.utter_message(response="utter_ask_square_side")
-        return [SlotSet("pending_calc", "square_area")]
-
-
-class ActionAskRectangleSides(Action):
-    def name(self) -> str:
-        return "action_ask_rectangle_sides"
-
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[str, Any],
-    ) -> List[Dict[str, Any]]:
-        dispatcher.utter_message(response="utter_ask_rectangle_sides")
-        return [SlotSet("pending_calc", "rectangle_area")]
-
-
-class ActionAskCubeSide(Action):
-    def name(self) -> str:
-        return "action_ask_cube_side"
-
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[str, Any],
-    ) -> List[Dict[str, Any]]:
-        dispatcher.utter_message(response="utter_ask_cube_side")
-        return [SlotSet("pending_calc", "cube_volume")]
-
-
-class ActionAskSphereRadius(Action):
-    def name(self) -> str:
-        return "action_ask_sphere_radius"
-
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[str, Any],
-    ) -> List[Dict[str, Any]]:
-        dispatcher.utter_message(response="utter_ask_sphere_radius")
-        return [SlotSet("pending_calc", "sphere_volume")]
-
-
-class ActionAskConeParams(Action):
-    def name(self) -> str:
-        return "action_ask_cone_params"
-
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[str, Any],
-    ) -> List[Dict[str, Any]]:
-        dispatcher.utter_message(response="utter_ask_cone_params")
-        return [SlotSet("pending_calc", "cone_volume")]
-
-
-class ActionAskCylinderParams(Action):
-    def name(self) -> str:
-        return "action_ask_cylinder_params"
-
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[str, Any],
-    ) -> List[Dict[str, Any]]:
-        dispatcher.utter_message(response="utter_ask_cylinder_params")
-        return [SlotSet("pending_calc", "cylinder_volume")]
-
-
-class ActionHandleMeasurements(Action):
-    def name(self) -> str:
-        return "action_handle_measurements"
-
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[str, Any],
-    ) -> List[Dict[str, Any]]:
-        pending = tracker.get_slot("pending_calc")
-        numbers = _parse_numbers(tracker.latest_message.get("text", ""))
-
-        if not pending:
-            dispatcher.utter_message(response="utter_ask_calc_type")
+        domain: DomainDict,
+    ) -> List[Dict[Text, Any]]:
+        shape = normalize_shape(tracker.get_slot("shape"))
+        if not shape:
+            dispatcher.utter_message(response="utter_invalid_shape")
             return []
 
-        if pending == "square_area":
-            if len(numbers) < 1:
-                dispatcher.utter_message(response="utter_ask_square_side")
-                return []
-            side = numbers[0]
-            if side <= 0:
-                dispatcher.utter_message(text="Талын урт 0-ээс их байх хэрэгтэй.")
-                return []
-            area = side * side
-            dispatcher.utter_message(
-                text=f"Квадратын талбай: S = a^2 = {side}^2 = {area}"
-            )
-            return [SlotSet("pending_calc", None)]
-
-        if pending == "rectangle_area":
-            if len(numbers) < 2:
-                dispatcher.utter_message(response="utter_ask_rectangle_sides")
-                return []
-            length, width = numbers[0], numbers[1]
-            if length <= 0 or width <= 0:
-                dispatcher.utter_message(text="Урт ба өргөн 0-ээс их байх хэрэгтэй.")
-                return []
-            area = length * width
-            dispatcher.utter_message(
-                text=(
-                    f"Тэгш өнцөгтийн талбай: "
-                    f"S = a*b = {length}*{width} = {area}"
+        perimeter = None
+        details = None
+        if shape == "circle":
+            radius = tracker.get_slot("radius")
+            if radius is not None:
+                perimeter = 2 * math.pi * radius
+                details = (
+                    "Томьёо: P = 2 * pi * радиус\n"
+                    f"Тооцоолол: P = 2 * {math.pi:.4f} * {radius:.2f} = {perimeter:.2f}"
                 )
-            )
-            return [SlotSet("pending_calc", None)]
-
-        if pending == "cube_volume":
-            if len(numbers) < 1:
-                dispatcher.utter_message(response="utter_ask_cube_side")
-                return []
-            side = numbers[0]
-            if side <= 0:
-                dispatcher.utter_message(text="Талын урт 0-ээс их байх хэрэгтэй.")
-                return []
-            volume = side ** 3
-            dispatcher.utter_message(
-                text=f"Кубын эзэлхүүн: V = a^3 = {side}^3 = {volume}"
-            )
-            return [SlotSet("pending_calc", None)]
-
-        if pending == "sphere_volume":
-            if len(numbers) < 1:
-                dispatcher.utter_message(response="utter_ask_sphere_radius")
-                return []
-            radius = numbers[0]
-            if radius <= 0:
-                dispatcher.utter_message(text="Радиус 0-ээс их байх хэрэгтэй.")
-                return []
-            volume = (4.0 / 3.0) * math.pi * (radius ** 3)
-            dispatcher.utter_message(
-                text=(
-                    f"Бөмбөрцгийн эзэлхүүн: "
-                    f"V = 4/3*pi*r^3 = {volume}"
+        elif shape == "rectangle":
+            width = tracker.get_slot("width")
+            height = tracker.get_slot("height")
+            if width is not None and height is not None:
+                perimeter = 2 * (width + height)
+                details = (
+                    "Томьёо: P = 2(урт + өргөн)\n"
+                    f"Тооцоолол: P = 2({width:.2f} + {height:.2f}) = {perimeter:.2f}"
                 )
-            )
-            return [SlotSet("pending_calc", None)]
-
-        if pending == "cone_volume":
-            if len(numbers) < 2:
-                dispatcher.utter_message(response="utter_ask_cone_params")
-                return []
-            radius, height = numbers[0], numbers[1]
-            if radius <= 0 or height <= 0:
-                dispatcher.utter_message(text="Радиус ба өндөр 0-ээс их байх хэрэгтэй.")
-                return []
-            volume = (1.0 / 3.0) * math.pi * (radius ** 2) * height
-            dispatcher.utter_message(
-                text=(
-                    f"Конусын эзэлхүүн: "
-                    f"V = 1/3*pi*r^2*h = {volume}"
+        elif shape == "square":
+            side = tracker.get_slot("square_side")
+            if side is not None:
+                perimeter = 4 * side
+                details = (
+                    "Томьёо: P = 4 * тал\n"
+                    f"Тооцоолол: P = 4 * {side:.2f} = {perimeter:.2f}"
                 )
-            )
-            return [SlotSet("pending_calc", None)]
-
-        if pending == "cylinder_volume":
-            if len(numbers) < 2:
-                dispatcher.utter_message(response="utter_ask_cylinder_params")
-                return []
-            radius, height = numbers[0], numbers[1]
-            if radius <= 0 or height <= 0:
-                dispatcher.utter_message(text="Радиус ба өндөр 0-ээс их байх хэрэгтэй.")
-                return []
-            volume = math.pi * (radius ** 2) * height
-            dispatcher.utter_message(
-                text=(
-                    f"Цилиндрийн эзэлхүүн: "
-                    f"V = pi*r^2*h = {volume}"
+        elif shape == "triangle":
+            side_a = tracker.get_slot("side_a")
+            side_b = tracker.get_slot("side_b")
+            side_c = tracker.get_slot("side_c")
+            if side_a is not None and side_b is not None and side_c is not None:
+                perimeter = side_a + side_b + side_c
+                details = (
+                    "Томьёо: P = a + b + c\n"
+                    f"Тооцоолол: P = {side_a:.2f} + {side_b:.2f} + {side_c:.2f} = {perimeter:.2f}"
                 )
-            )
-            return [SlotSet("pending_calc", None)]
 
-        dispatcher.utter_message(response="utter_ask_calc_type")
-        return []
+        if perimeter is None:
+            dispatcher.utter_message(text="Дутуу утга байна. Дахин оролдоно уу.")
+            return []
+
+        label = SHAPE_LABELS.get(shape, "дүрс")
+        dispatcher.utter_message(text=f"{label} дүрсний хүрээ {perimeter:.2f} байна.")
+        if details:
+            dispatcher.utter_message(text=details)
+        return [AllSlotsReset(), FollowupAction("perimeter_form")]

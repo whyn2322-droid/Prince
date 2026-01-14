@@ -3,76 +3,132 @@ version: "3.1"
 intents:
   - greet
   - goodbye
+  - request_perimeter
+  - inform
   - affirm
   - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
-  - calc_square_area
-  - calc_rectangle_area
-  - calc_cube_volume
-  - calc_sphere_volume
-  - calc_cone_volume
-  - calc_cylinder_volume
-  - inform_measurements
+  - out_of_scope
+
+entities:
+  - shape
 
 slots:
-  pending_calc:
+  shape:
     type: text
     influence_conversation: false
     mappings:
-      - type: custom
+      - type: from_entity
+        entity: shape
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: shape
+        not_intent: greet
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: shape
+        not_intent: greet
+  radius:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: radius
+  width:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: width
+  height:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: height
+  square_side:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: square_side
+  side_a:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: side_a
+  side_b:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: side_b
+  side_c:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: side_c
+
+forms:
+  perimeter_form:
+    required_slots:
+      - shape
+      - radius
+      - width
+      - height
+      - square_side
+      - side_a
+      - side_b
+      - side_c
 
 responses:
   utter_greet:
-    - text: "Сайн уу! Яааж байна?"
-
-  utter_cheer_up:
-    - text: "Сэтгэл сэргээх нэг зүйл:"
-      image: "https://i.imgur.com/nGF1K8f.jpg"
-
-  utter_did_that_help:
-    - text: "Тус болсон уу?"
-
-  utter_happy:
-    - text: "Гайхалтай, үргэлжлүүлээрэй!"
-
+    - text: "Сайн уу! Би дүрсийн хүрээний уртыг бодож өгнө."
   utter_goodbye:
-    - text: "Баяртай!"
-
-  utter_iamabot:
-    - text: "Би Rasa дээр ажилладаг бот."
-
+    - text: "Баяртай! Хэрэгтэй бол дахин асуугаарай."
+  utter_ask_shape:
+    - text: "Ямар дүрсний хүрээг бодох вэ? (тойрог, тэгш өнцөгт, дөрвөлжин, гурвалжин)"
+  utter_ask_radius:
+    - text: "Радиус хэд вэ?"
+  utter_ask_width:
+    - text: "Урт хэд вэ?"
+  utter_ask_height:
+    - text: "Өргөн хэд вэ?"
   utter_ask_square_side:
-    - text: "Квадратин талын уртыг өгнө үү (жишээ: a=5 эсвэл 5)."
-
-  utter_ask_rectangle_sides:
-    - text: "Тэгш өнцөгтийн урт ба өргөнийг өгнө үү (жишээ: 5 3)."
-
-  utter_ask_cube_side:
-    - text: "Кубын талын уртыг өгнө үү (жишээ: a=5 эсвэл 5)."
-
-  utter_ask_sphere_radius:
-    - text: "Бөмбөрцгийн радиусыг өгнө үү (жишээ: r=3 эсвэл 3)."
-
-  utter_ask_cone_params:
-    - text: "Конусын радиус ба өндрийг өгнө үү (жишээ: r=3 h=5)."
-
-  utter_ask_cylinder_params:
-    - text: "Цилиндрийн радиус ба өндрийг өгнө үү (жишээ: r=3 h=5)."
-
-  utter_ask_calc_type:
-    - text: "Ямар тооцоолол хийх вэ? Квадрат, тэгш өнцөгт, куб, бөмбөрцөг, конус, цилиндр."
+    - text: "Дөрвөлжний тал хэд вэ?"
+  utter_ask_side_a:
+    - text: "Гурвалжны a талын урт хэд вэ?"
+  utter_ask_side_b:
+    - text: "Гурвалжны b талын урт хэд вэ?"
+  utter_ask_side_c:
+    - text: "Гурвалжны c талын урт хэд вэ?"
+  utter_invalid_shape:
+    - text: "Дүрсийг зөв оруулна уу. (тойрог, тэгш өнцөгт, дөрвөлжин, гурвалжин)"
+  utter_invalid_number:
+    - text: "Эерэг тоо оруулна уу."
+  utter_out_of_scope:
+    - text: "Уучлаарай, би зөвхөн дүрсийн хүрээний уртыг бодож өгнө."
 
 actions:
-  - action_ask_square_side
-  - action_ask_rectangle_sides
-  - action_ask_cube_side
-  - action_ask_sphere_radius
-  - action_ask_cone_params
-  - action_ask_cylinder_params
-  - action_handle_measurements
+  - action_calculate_perimeter
+  - validate_perimeter_form
 
 session_config:
   session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+  carry_over_slots_to_new_session: false
