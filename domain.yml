@@ -3,11 +3,10 @@ version: "3.1"
 intents:
   - greet
   - goodbye
-  - request_perimeter
+  - ask_area
+  - choose_shape
   - inform
-  - affirm
-  - deny
-  - out_of_scope
+  - restart_area
 
 entities:
   - shape
@@ -20,115 +19,140 @@ slots:
       - type: from_entity
         entity: shape
         conditions:
-          - active_loop: perimeter_form
-            requested_slot: shape
-        not_intent: greet
+          - active_loop: area_form
       - type: from_text
+        intent: choose_shape
         conditions:
-          - active_loop: perimeter_form
+          - active_loop: area_form
             requested_slot: shape
-        not_intent: greet
-  radius:
+
+  length:
     type: float
     influence_conversation: false
     mappings:
       - type: from_text
+        intent: inform
         conditions:
-          - active_loop: perimeter_form
-            requested_slot: radius
+          - active_loop: area_form
+            requested_slot: length
+
   width:
     type: float
     influence_conversation: false
     mappings:
       - type: from_text
+        intent: inform
         conditions:
-          - active_loop: perimeter_form
+          - active_loop: area_form
             requested_slot: width
+
+  radius:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: area_form
+            requested_slot: radius
+
+  base:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: area_form
+            requested_slot: base
+
   height:
     type: float
     influence_conversation: false
     mappings:
       - type: from_text
+        intent: inform
         conditions:
-          - active_loop: perimeter_form
+          - active_loop: area_form
             requested_slot: height
-  square_side:
-    type: float
-    influence_conversation: false
-    mappings:
-      - type: from_text
-        conditions:
-          - active_loop: perimeter_form
-            requested_slot: square_side
-  side_a:
-    type: float
-    influence_conversation: false
-    mappings:
-      - type: from_text
-        conditions:
-          - active_loop: perimeter_form
-            requested_slot: side_a
-  side_b:
-    type: float
-    influence_conversation: false
-    mappings:
-      - type: from_text
-        conditions:
-          - active_loop: perimeter_form
-            requested_slot: side_b
-  side_c:
-    type: float
-    influence_conversation: false
-    mappings:
-      - type: from_text
-        conditions:
-          - active_loop: perimeter_form
-            requested_slot: side_c
 
-forms:
-  perimeter_form:
-    required_slots:
-      - shape
-      - radius
-      - width
-      - height
-      - square_side
-      - side_a
-      - side_b
-      - side_c
+  b1:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: area_form
+            requested_slot: b1
+
+  b2:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: area_form
+            requested_slot: b2
 
 responses:
   utter_greet:
-    - text: "Сайн уу! Би дүрсийн хүрээний уртыг бодож өгнө."
+    - text: "Сайн уу 👋 'дүрсний талбай ол' гэж бичээд эхлүүлээрэй."
+
   utter_goodbye:
-    - text: "Баяртай! Хэрэгтэй бол дахин асуугаарай."
+    - text: "Баяртай 👋"
+
+  utter_how_to_start:
+    - text: "Эхлүүлэхийн тулд: 'дүрсний талбай ол' гэж бичээрэй."
+
   utter_ask_shape:
-    - text: "Ямар дүрсний хүрээг бодох вэ? (тойрог, тэгш өнцөгт, дөрвөлжин, гурвалжин)"
-  utter_ask_radius:
-    - text: "Радиус хэд вэ?"
+    - text: "Ямар дүрсний талбай олох вэ?"
+      buttons:
+        - title: "Тэгш өнцөгт"
+          payload: '/choose_shape{{"shape":"rectangle"}}'
+        - title: "Тойрог"
+          payload: '/choose_shape{{"shape":"circle"}}'
+        - title: "Гурвалжин"
+          payload: '/choose_shape{{"shape":"triangle"}}'
+        - title: "Трапец"
+          payload: '/choose_shape{{"shape":"trapezoid"}}'
+        - title: "Параллелограмм"
+          payload: '/choose_shape{{"shape":"parallelogram"}}'
+
+
+  utter_ask_length:
+    - text: "Урт хэд вэ? (ж: 5)"
   utter_ask_width:
-    - text: "Урт хэд вэ?"
+    - text: "Өргөн хэд вэ? (ж: 3)"
+  utter_ask_radius:
+    - text: "Радиус хэд вэ? (ж: 5)"
+  utter_ask_base:
+    - text: "Суурь хэд вэ? (ж: 6)"
   utter_ask_height:
-    - text: "Өргөн хэд вэ?"
-  utter_ask_square_side:
-    - text: "Дөрвөлжний тал хэд вэ?"
-  utter_ask_side_a:
-    - text: "Гурвалжны a талын урт хэд вэ?"
-  utter_ask_side_b:
-    - text: "Гурвалжны b талын урт хэд вэ?"
-  utter_ask_side_c:
-    - text: "Гурвалжны c талын урт хэд вэ?"
-  utter_invalid_shape:
-    - text: "Дүрсийг зөв оруулна уу. (тойрог, тэгш өнцөгт, дөрвөлжин, гурвалжин)"
-  utter_invalid_number:
-    - text: "Эерэг тоо оруулна уу."
-  utter_out_of_scope:
-    - text: "Уучлаарай, би зөвхөн дүрсийн хүрээний уртыг бодож өгнө."
+    - text: "Өндөр хэд вэ? (ж: 4)"
+  utter_ask_b1:
+    - text: "Трапецын суурь1 хэд вэ? (ж: 6)"
+  utter_ask_b2:
+    - text: "Трапецын суурь2 хэд вэ? (ж: 10)"
+
+forms:
+  area_form:
+    required_slots:
+      - shape
+      - length
+      - width
+      - radius
+      - base
+      - height
+      - b1
+      - b2
 
 actions:
-  - action_calculate_perimeter
-  - validate_perimeter_form
+  - validate_area_form
+  - action_calculate_area
+  - action_reset_area
 
 session_config:
   session_expiration_time: 60
-  carry_over_slots_to_new_session: false
+  carry_over_slots_to_new_session: true

@@ -1,74 +1,72 @@
 version: "3.1"
 
 nlu:
-  - intent: greet
-    examples: |
-      - Сайн уу
-      - Сайн байна уу
-      - Өдрийн мэнд
-      - Мэнд
-      - Сайн уу бот
-  - intent: goodbye
-    examples: |
-      - Баяртай
-      - За баяртай
-      - Дараа уулзъя
-      - Баярлалаа, баяртай
-  - intent: request_perimeter
-    examples: |
-      - Дүрсний хүрээний уртыг бодоод өг
-      - Хүрээ ол
-      - Периметр бод
-      - [тойрог](shape)-ийн хүрээ
-      - [тэгш өнцөгт](shape) хүрээ ол
-      - [дөрвөлжин](shape) хүрээ
-      - [гурвалжин](shape) хүрээ
-      - [тойрог](shape) 5-ийн хүрээ
-      - [тэгш өнцөгт](shape) 5 3 хүрээ
-  - intent: inform
-    examples: |
-      - [тойрог](shape)
-      - [дугуй](shape)
-      - [тэгш өнцөгт](shape)
-      - [дөрвөлжин](shape)
-      - [квадрат](shape)
-      - [гурвалжин](shape)
-      - 5
-      - 7.5
-      - 10 см
-      - радиус 8
-      - урт 5 өргөн 3
-      - a тал 3
-  - intent: affirm
-    examples: |
-      - тийм
-      - зөв
-      - болно
-  - intent: deny
-    examples: |
-      - үгүй
-      - биш
-      - хэрэггүй
-  - intent: out_of_scope
-    examples: |
-      - цаг хэд болж байна
-      - дуул
-      - зураг явуул
+- intent: greet
+  examples: |
+    - сайн уу
+    - сайн байна уу
+    - hello
+    - hi
 
-  - synonym: circle
-    examples: |
-      - тойрог
-      - тойргийн
-      - дугуй
-  - synonym: rectangle
-    examples: |
-      - тэгш өнцөгт
-      - тэгш өнцөгтийн
-  - synonym: square
-    examples: |
-      - дөрвөлжин
-      - квадрат
-  - synonym: triangle
-    examples: |
-      - гурвалжин
-      - гурвалжны
+- intent: goodbye
+  examples: |
+    - баяртай
+    - bye
+
+- intent: ask_area
+  examples: |
+    - дүрсний талбай ол
+    - талбай бод
+    - талбай ол
+
+- intent: restart_area
+  examples: |
+    - дахин эхэлье
+    - шинээр эхэлье
+    - эхнээс нь
+    - дахин эхлэх
+    - restart
+    - дахин эхлүүл
+
+# ✅ ЭНЭ ХЭСЭГ ЧУХАЛ: "трапец" ганцаараа ирэхэд choose_shape гэж 100% дөхнө
+- intent: choose_shape
+  examples: |
+    - [дөрвөлжин]{"entity":"shape","value":"rectangle"}
+    - [тэгш өнцөгт]{"entity":"shape","value":"rectangle"}
+    - [тойрог]{"entity":"shape","value":"circle"}
+    - [гурвалжин]{"entity":"shape","value":"triangle"}
+    - [трапец]{"entity":"shape","value":"trapezoid"}
+    - [параллелограмм]{"entity":"shape","value":"parallelogram"}
+    - би [трапец]{"entity":"shape","value":"trapezoid"} сонгоё
+    - [гурвалжин]{"entity":"shape","value":"triangle"}-ы талбай
+    - [параллелограмм]{"entity":"shape","value":"parallelogram"} сонгох
+    - [тойрог]{"entity":"shape","value":"circle"} сонгоё
+    - [дөрвөлжин]{"entity":"shape","value":"rectangle"} талбай
+- intent: inform
+  examples: |
+    - 5
+    - 3
+    - 10
+    - 4.5
+    - 6,2
+
+- synonym: rectangle
+  examples: |
+    - дөрвөлжин
+    - тэгш өнцөгт
+
+- synonym: circle
+  examples: |
+    - тойрог
+
+- synonym: triangle
+  examples: |
+    - гурвалжин
+
+- synonym: trapezoid
+  examples: |
+    - трапец
+
+- synonym: parallelogram
+  examples: |
+    - параллелограмм

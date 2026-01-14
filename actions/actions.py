@@ -1,246 +1,232 @@
-from __future__ import annotations
-
+from typing import Any, Dict, List, Text, Optional
 import math
 import re
-from typing import Any, Dict, List, Optional, Text
 
-from rasa_sdk import Action, FormValidationAction, Tracker
-from rasa_sdk.events import AllSlotsReset, FollowupAction
+from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.types import DomainDict
+from rasa_sdk.forms import FormValidationAction
+from rasa_sdk.events import AllSlotsReset
 
-NUMBER_PATTERN = re.compile(r"-?\d+(?:[.,]\d+)?")
-
-SHAPE_SYNONYMS = {
-    "circle": {"circle", "тойрог", "тойргийн", "дугуй"},
-    "rectangle": {"rectangle", "тэгш өнцөгт", "тэгш өнцөгтийн"},
-    "square": {"square", "дөрвөлжин", "квадрат"},
-    "triangle": {"triangle", "гурвалжин", "гурвалжны"},
-}
-
-SHAPE_LABELS = {
-    "circle": "тойрог",
-    "rectangle": "тэгш өнцөгт",
-    "square": "дөрвөлжин",
-    "triangle": "гурвалжин",
-}
+POSITIVE_NUMBER_MESSAGE = "Эерэг тоо оруулна уу. (ж: 5 эсвэл 3.5)"
 
 
-def normalize_shape(value: Optional[Text]) -> Optional[Text]:
-    if not value:
+def _parse_number(text: str) -> Optional[float]:
+    if not text:
         return None
-    text = value.strip().lower()
-    for shape, synonyms in SHAPE_SYNONYMS.items():
-        if text == shape or text in synonyms:
-            return shape
-    for shape, synonyms in SHAPE_SYNONYMS.items():
-        for synonym in synonyms:
-            if synonym in text:
-                return shape
-    return None
-
-
-def parse_positive_number(value: Any) -> Optional[float]:
-    if value is None:
+    t = text.strip().replace(",", ".")
+    m = re.search(r"-?\d+(?:\.\d+)?", t)
+    if not m:
         return None
-    if isinstance(value, (int, float)):
-        number = float(value)
-    else:
-        match = NUMBER_PATTERN.search(str(value))
-        if not match:
+    try:
+        return float(m.group(0))
+    except Exception:
+        return None
+
+
+def _positive(x: Optional[float]) -> bool:
+    return x is not None and x > 0
+
+
+def _fmt_num(value: float) -> str:
+    return f"{value:g}"
+
+
+def _get_slot_float(tracker: Tracker, slot_name: Text) -> Optional[float]:
+    value = tracker.get_slot(slot_name)
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _require_positive_slots(
+    dispatcher: CollectingDispatcher, tracker: Tracker, slot_names: List[Text]
+) -> Optional[List[float]]:
+    values: List[float] = []
+    for slot_name in slot_names:
+        num = _get_slot_float(tracker, slot_name)
+        if not _positive(num):
+            dispatcher.utter_message(text=POSITIVE_NUMBER_MESSAGE)
             return None
-        number = float(match.group(0).replace(",", "."))
-    if number <= 0:
-        return None
-    return number
+        values.append(num)
+    return values
 
 
-class ValidatePerimeterForm(FormValidationAction):
+class ValidateAreaForm(FormValidationAction):
     def name(self) -> Text:
-        return "validate_perimeter_form"
+        return "validate_area_form"
 
     async def required_slots(
         self,
         slots_mapped_in_domain: List[Text],
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
-        domain: DomainDict,
+        domain: Dict[Text, Any],
     ) -> List[Text]:
-        shape = normalize_shape(tracker.get_slot("shape"))
+        shape = tracker.get_slot("shape")
+
+        if not shape:
+            return ["shape"]
+
+        if shape == "rectangle":
+            return ["shape", "length", "width"]
         if shape == "circle":
             return ["shape", "radius"]
-        if shape == "rectangle":
-            return ["shape", "width", "height"]
-        if shape == "square":
-            return ["shape", "square_side"]
         if shape == "triangle":
-            return ["shape", "side_a", "side_b", "side_c"]
+            return ["shape", "base", "height"]
+        if shape == "trapezoid":
+            return ["shape", "b1", "b2", "height"]
+        if shape == "parallelogram":
+            return ["shape", "base", "height"]
+
         return ["shape"]
 
-    def validate_shape(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: DomainDict,
-    ) -> Dict[Text, Any]:
-        shape = normalize_shape(value)
-        if shape:
-            return {"shape": shape}
-        dispatcher.utter_message(response="utter_invalid_shape")
-        return {"shape": None}
+    def validate_shape(self, value: Text, dispatcher, tracker, domain) -> Dict[Text, Any]:
+        if not value:
+            dispatcher.utter_message(text="Дүрсээ сонгоно уу.")
+            return {"shape": None}
 
-    def validate_radius(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: DomainDict,
-    ) -> Dict[Text, Any]:
-        number = parse_positive_number(value)
-        if number is not None:
-            return {"radius": number}
-        dispatcher.utter_message(response="utter_invalid_number")
-        return {"radius": None}
+        v = value.strip().lower()
 
-    def validate_width(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: DomainDict,
-    ) -> Dict[Text, Any]:
-        number = parse_positive_number(value)
-        if number is not None:
-            return {"width": number}
-        dispatcher.utter_message(response="utter_invalid_number")
-        return {"width": None}
+        mapping = {
+            "дөрвөлжин": "rectangle",
+            "тэгш өнцөгт": "rectangle",
+            "rectangle": "rectangle",
+            "тойрог": "circle",
+            "circle": "circle",
+            "гурвалжин": "triangle",
+            "triangle": "triangle",
+            "трапец": "trapezoid",
+            "trapezoid": "trapezoid",
+            "параллелограмм": "parallelogram",
+            "parallelogram": "parallelogram",
+        }
 
-    def validate_height(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: DomainDict,
-    ) -> Dict[Text, Any]:
-        number = parse_positive_number(value)
-        if number is not None:
-            return {"height": number}
-        dispatcher.utter_message(response="utter_invalid_number")
-        return {"height": None}
+        shape = mapping.get(v, v)
+        if shape not in ["rectangle", "circle", "triangle", "trapezoid", "parallelogram"]:
+            return {"shape": None}
 
-    def validate_square_side(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: DomainDict,
-    ) -> Dict[Text, Any]:
-        number = parse_positive_number(value)
-        if number is not None:
-            return {"square_side": number}
-        dispatcher.utter_message(response="utter_invalid_number")
-        return {"square_side": None}
+        # шинэ дүрс сонгоход өмнөх хэмжээсүүдийг цэвэрлэх
+        return {
+            "shape": shape,
+            "length": None, "width": None,
+            "radius": None,
+            "base": None, "height": None,
+            "b1": None, "b2": None,
+        }
 
-    def validate_side_a(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: DomainDict,
-    ) -> Dict[Text, Any]:
-        number = parse_positive_number(value)
-        if number is not None:
-            return {"side_a": number}
-        dispatcher.utter_message(response="utter_invalid_number")
-        return {"side_a": None}
+    def _validate_pos(self, slot_name: Text, dispatcher: CollectingDispatcher, value: Any) -> Dict[Text, Any]:
+        num = _parse_number(str(value))
+        if not _positive(num):
+            dispatcher.utter_message(text=POSITIVE_NUMBER_MESSAGE)
+            return {slot_name: None}
+        return {slot_name: float(num)}
 
-    def validate_side_b(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: DomainDict,
-    ) -> Dict[Text, Any]:
-        number = parse_positive_number(value)
-        if number is not None:
-            return {"side_b": number}
-        dispatcher.utter_message(response="utter_invalid_number")
-        return {"side_b": None}
+    def validate_length(self, value: Any, dispatcher, tracker, domain):
+        return self._validate_pos("length", dispatcher, value)
 
-    def validate_side_c(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: DomainDict,
-    ) -> Dict[Text, Any]:
-        number = parse_positive_number(value)
-        if number is not None:
-            return {"side_c": number}
-        dispatcher.utter_message(response="utter_invalid_number")
-        return {"side_c": None}
+    def validate_width(self, value: Any, dispatcher, tracker, domain):
+        return self._validate_pos("width", dispatcher, value)
+
+    def validate_radius(self, value: Any, dispatcher, tracker, domain):
+        return self._validate_pos("radius", dispatcher, value)
+
+    def validate_base(self, value: Any, dispatcher, tracker, domain):
+        return self._validate_pos("base", dispatcher, value)
+
+    def validate_height(self, value: Any, dispatcher, tracker, domain):
+        return self._validate_pos("height", dispatcher, value)
+
+    def validate_b1(self, value: Any, dispatcher, tracker, domain):
+        return self._validate_pos("b1", dispatcher, value)
+
+    def validate_b2(self, value: Any, dispatcher, tracker, domain):
+        return self._validate_pos("b2", dispatcher, value)
 
 
-class ActionCalculatePerimeter(Action):
+class ActionCalculateArea(Action):
     def name(self) -> Text:
-        return "action_calculate_perimeter"
+        return "action_calculate_area"
 
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: DomainDict,
-    ) -> List[Dict[Text, Any]]:
-        shape = normalize_shape(tracker.get_slot("shape"))
-        if not shape:
-            dispatcher.utter_message(response="utter_invalid_shape")
-            return []
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        shape = tracker.get_slot("shape")
 
-        perimeter = None
-        details = None
-        if shape == "circle":
-            radius = tracker.get_slot("radius")
-            if radius is not None:
-                perimeter = 2 * math.pi * radius
-                details = (
-                    "Томьёо: P = 2 * pi * радиус\n"
-                    f"Тооцоолол: P = 2 * {math.pi:.4f} * {radius:.2f} = {perimeter:.2f}"
+        if shape == "rectangle":
+            values = _require_positive_slots(dispatcher, tracker, ["length", "width"])
+            if not values:
+                return []
+            length, width = values
+            area = length * width
+            dispatcher.utter_message(
+                text=(
+                    "Тэгш өнцөгт: "
+                    f"S = урт x өргөн = {_fmt_num(length)} x {_fmt_num(width)} = {_fmt_num(area)}"
                 )
-        elif shape == "rectangle":
-            width = tracker.get_slot("width")
-            height = tracker.get_slot("height")
-            if width is not None and height is not None:
-                perimeter = 2 * (width + height)
-                details = (
-                    "Томьёо: P = 2(урт + өргөн)\n"
-                    f"Тооцоолол: P = 2({width:.2f} + {height:.2f}) = {perimeter:.2f}"
+            )
+
+        elif shape == "circle":
+            values = _require_positive_slots(dispatcher, tracker, ["radius"])
+            if not values:
+                return []
+            r = values[0]
+            area = math.pi * r * r
+            dispatcher.utter_message(
+                text=(
+                    "Тойрог: "
+                    f"S = pi * r^2 = pi * {_fmt_num(r)}^2 = {_fmt_num(area)}"
                 )
-        elif shape == "square":
-            side = tracker.get_slot("square_side")
-            if side is not None:
-                perimeter = 4 * side
-                details = (
-                    "Томьёо: P = 4 * тал\n"
-                    f"Тооцоолол: P = 4 * {side:.2f} = {perimeter:.2f}"
-                )
+            )
+
         elif shape == "triangle":
-            side_a = tracker.get_slot("side_a")
-            side_b = tracker.get_slot("side_b")
-            side_c = tracker.get_slot("side_c")
-            if side_a is not None and side_b is not None and side_c is not None:
-                perimeter = side_a + side_b + side_c
-                details = (
-                    "Томьёо: P = a + b + c\n"
-                    f"Тооцоолол: P = {side_a:.2f} + {side_b:.2f} + {side_c:.2f} = {perimeter:.2f}"
+            values = _require_positive_slots(dispatcher, tracker, ["base", "height"])
+            if not values:
+                return []
+            base, height = values
+            area = 0.5 * base * height
+            dispatcher.utter_message(
+                text=(
+                    "Гурвалжин: "
+                    "S = 0.5 * суурь * өндөр = "
+                    f"0.5 * {_fmt_num(base)} * {_fmt_num(height)} = {_fmt_num(area)}"
                 )
+            )
 
-        if perimeter is None:
-            dispatcher.utter_message(text="Дутуу утга байна. Дахин оролдоно уу.")
-            return []
+        elif shape == "trapezoid":
+            values = _require_positive_slots(dispatcher, tracker, ["b1", "b2", "height"])
+            if not values:
+                return []
+            b1, b2, h = values
+            area = (b1 + b2) * h / 2.0
+            dispatcher.utter_message(
+                text=(
+                    "Трапец: "
+                    "S = (b1 + b2) * h / 2 = "
+                    f"({_fmt_num(b1)} + {_fmt_num(b2)}) * {_fmt_num(h)} / 2 = {_fmt_num(area)}"
+                )
+            )
 
-        label = SHAPE_LABELS.get(shape, "дүрс")
-        dispatcher.utter_message(text=f"{label} дүрсний хүрээ {perimeter:.2f} байна.")
-        if details:
-            dispatcher.utter_message(text=details)
-        return [AllSlotsReset(), FollowupAction("perimeter_form")]
+        elif shape == "parallelogram":
+            values = _require_positive_slots(dispatcher, tracker, ["base", "height"])
+            if not values:
+                return []
+            base, height = values
+            area = base * height
+            dispatcher.utter_message(
+                text=(
+                    "Параллелограмм: "
+                    f"S = суурь * өндөр = {_fmt_num(base)} * {_fmt_num(height)} = {_fmt_num(area)}"
+                )
+            )
+
+        else:
+            dispatcher.utter_message(text="Дүрс сонгогдоогүй байна. 'дүрсний талбай ол' гэж дахин эхлүүлээрэй.")
+
+        return []
+
+
+class ActionResetArea(Action):
+    def name(self) -> Text:
+        return "action_reset_area"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return [AllSlotsReset()]
