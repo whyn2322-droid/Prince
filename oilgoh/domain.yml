@@ -1,0 +1,26 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - math_query
+  - out_of_scope
+
+responses:
+  utter_greet:
+    - text: "Сайн байна уу! Энгийн тооцоолол хийж өгнө. Асуултаа бичнэ үү."
+  utter_goodbye:
+    - text: "Баяртай!"
+  utter_ask_math:
+    - text: "Тооцох бодлогоо 2 ба түүнээс олон тоотойгоор бичнэ үү."
+  utter_invalid_math:
+    - text: "Үйлдэл тодорхойгүй байна. Нэмэх, хасах, үржүүлэх, хуваах гэж бичээрэй."
+  utter_out_of_scope:
+    - text: "Уучлаарай, энэ талаар тусалж чадахгүй."
+
+actions:
+  - action_calculate_math
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: false

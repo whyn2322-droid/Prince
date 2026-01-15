@@ -1,0 +1,13 @@
+version: "3.1"
+
+stories:
+  - story: math query
+    steps:
+      - intent: math_query
+      - action: action_calculate_math
+  - story: greet then math
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: math_query
+      - action: action_calculate_math
