@@ -1,50 +1,48 @@
 version: "3.1"
 
 rules:
-- rule: greet only when no form
-  condition:
-    - active_loop: null
-  steps:
-    - intent: greet
-    - action: utter_greet
 
-- rule: say goodbye
+- rule: Say goodbye anytime the user says goodbye
   steps:
-    - intent: goodbye
-    - action: utter_goodbye
+  - intent: goodbye
+  - action: utter_goodbye
 
-- rule: start form
+- rule: Say 'I am a bot' anytime the user challenges
   steps:
-    - intent: ask_area
-    - action: area_form
-    - active_loop: area_form
+  - intent: bot_challenge
+  - action: utter_iamabot
 
-# ✅ shape-аа шууд бичсэн ч form эхлүүлнэ
-- rule: choose shape starts form
+- rule: ask square side when user wants square area
   steps:
-    - intent: choose_shape
-    - action: area_form
-    - active_loop: area_form
+  - intent: calc_square_area
+  - action: action_ask_square_side
 
-- rule: fill numbers while form
-  condition:
-    - active_loop: area_form
+- rule: ask rectangle sides when user wants rectangle area
   steps:
-    - intent: inform
-    - action: area_form
-    - active_loop: area_form
+  - intent: calc_rectangle_area
+  - action: action_ask_rectangle_sides
 
-- rule: submit form
-  condition:
-    - active_loop: area_form
+- rule: ask cube side when user wants cube volume
   steps:
-    - action: area_form
-    - active_loop: null
-    - action: action_calculate_area
-    - action: action_reset_area
+  - intent: calc_cube_volume
+  - action: action_ask_cube_side
 
-- rule: restart area
+- rule: ask sphere radius when user wants sphere volume
   steps:
-    - intent: restart_area
-    - action: action_reset_area
-    - action: utter_how_to_start
+  - intent: calc_sphere_volume
+  - action: action_ask_sphere_radius
+
+- rule: ask cone params when user wants cone volume
+  steps:
+  - intent: calc_cone_volume
+  - action: action_ask_cone_params
+
+- rule: ask cylinder params when user wants cylinder volume
+  steps:
+  - intent: calc_cylinder_volume
+  - action: action_ask_cylinder_params
+
+- rule: handle measurements for pending calc
+  steps:
+  - intent: inform_measurements
+  - action: action_handle_measurements

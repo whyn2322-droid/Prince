@@ -3,155 +3,75 @@ version: "3.1"
 intents:
   - greet
   - goodbye
-  - ask_area
-  - choose_shape
-  - inform
-  - restart_area
-
-entities:
-  - shape
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - calc_square_area
+  - calc_rectangle_area
+  - calc_cube_volume
+  - calc_sphere_volume
+  - calc_cone_volume
+  - calc_cylinder_volume
+  - inform_measurements
 
 slots:
-  shape:
+  pending_calc:
     type: text
     influence_conversation: false
     mappings:
-      - type: from_entity
-        entity: shape
-        conditions:
-          - active_loop: area_form
-      - type: from_text
-        intent: choose_shape
-        conditions:
-          - active_loop: area_form
-            requested_slot: shape
-
-  length:
-    type: float
-    influence_conversation: false
-    mappings:
-      - type: from_text
-        intent: inform
-        conditions:
-          - active_loop: area_form
-            requested_slot: length
-
-  width:
-    type: float
-    influence_conversation: false
-    mappings:
-      - type: from_text
-        intent: inform
-        conditions:
-          - active_loop: area_form
-            requested_slot: width
-
-  radius:
-    type: float
-    influence_conversation: false
-    mappings:
-      - type: from_text
-        intent: inform
-        conditions:
-          - active_loop: area_form
-            requested_slot: radius
-
-  base:
-    type: float
-    influence_conversation: false
-    mappings:
-      - type: from_text
-        intent: inform
-        conditions:
-          - active_loop: area_form
-            requested_slot: base
-
-  height:
-    type: float
-    influence_conversation: false
-    mappings:
-      - type: from_text
-        intent: inform
-        conditions:
-          - active_loop: area_form
-            requested_slot: height
-
-  b1:
-    type: float
-    influence_conversation: false
-    mappings:
-      - type: from_text
-        intent: inform
-        conditions:
-          - active_loop: area_form
-            requested_slot: b1
-
-  b2:
-    type: float
-    influence_conversation: false
-    mappings:
-      - type: from_text
-        intent: inform
-        conditions:
-          - active_loop: area_form
-            requested_slot: b2
+      - type: custom
 
 responses:
   utter_greet:
-    - text: "Сайн уу 👋 'дүрсний талбай ол' гэж бичээд эхлүүлээрэй."
+    - text: "Сайн уу! Яааж байна?"
+
+  utter_cheer_up:
+    - text: "Сэтгэл сэргээх нэг зүйл:"
+      image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+    - text: "Тус болсон уу?"
+
+  utter_happy:
+    - text: "Гайхалтай, үргэлжлүүлээрэй!"
 
   utter_goodbye:
-    - text: "Баяртай 👋"
+    - text: "Баяртай!"
 
-  utter_how_to_start:
-    - text: "Эхлүүлэхийн тулд: 'дүрсний талбай ол' гэж бичээрэй."
+  utter_iamabot:
+    - text: "Би Rasa дээр ажилладаг бот."
 
-  utter_ask_shape:
-    - text: "Ямар дүрсний талбай олох вэ?"
-      buttons:
-        - title: "Тэгш өнцөгт"
-          payload: '/choose_shape{{"shape":"rectangle"}}'
-        - title: "Тойрог"
-          payload: '/choose_shape{{"shape":"circle"}}'
-        - title: "Гурвалжин"
-          payload: '/choose_shape{{"shape":"triangle"}}'
-        - title: "Трапец"
-          payload: '/choose_shape{{"shape":"trapezoid"}}'
-        - title: "Параллелограмм"
-          payload: '/choose_shape{{"shape":"parallelogram"}}'
+  utter_ask_square_side:
+    - text: "Квадратин талын уртыг өгнө үү (жишээ: a=5 эсвэл 5)."
 
+  utter_ask_rectangle_sides:
+    - text: "Тэгш өнцөгтийн урт ба өргөнийг өгнө үү (жишээ: 5 3)."
 
-  utter_ask_length:
-    - text: "Урт хэд вэ? (ж: 5)"
-  utter_ask_width:
-    - text: "Өргөн хэд вэ? (ж: 3)"
-  utter_ask_radius:
-    - text: "Радиус хэд вэ? (ж: 5)"
-  utter_ask_base:
-    - text: "Суурь хэд вэ? (ж: 6)"
-  utter_ask_height:
-    - text: "Өндөр хэд вэ? (ж: 4)"
-  utter_ask_b1:
-    - text: "Трапецын суурь1 хэд вэ? (ж: 6)"
-  utter_ask_b2:
-    - text: "Трапецын суурь2 хэд вэ? (ж: 10)"
+  utter_ask_cube_side:
+    - text: "Кубын талын уртыг өгнө үү (жишээ: a=5 эсвэл 5)."
 
-forms:
-  area_form:
-    required_slots:
-      - shape
-      - length
-      - width
-      - radius
-      - base
-      - height
-      - b1
-      - b2
+  utter_ask_sphere_radius:
+    - text: "Бөмбөрцгийн радиусыг өгнө үү (жишээ: r=3 эсвэл 3)."
+
+  utter_ask_cone_params:
+    - text: "Конусын радиус ба өндрийг өгнө үү (жишээ: r=3 h=5)."
+
+  utter_ask_cylinder_params:
+    - text: "Цилиндрийн радиус ба өндрийг өгнө үү (жишээ: r=3 h=5)."
+
+  utter_ask_calc_type:
+    - text: "Ямар тооцоолол хийх вэ? Квадрат, тэгш өнцөгт, куб, бөмбөрцөг, конус, цилиндр."
 
 actions:
-  - validate_area_form
-  - action_calculate_area
-  - action_reset_area
+  - action_ask_square_side
+  - action_ask_rectangle_sides
+  - action_ask_cube_side
+  - action_ask_sphere_radius
+  - action_ask_cone_params
+  - action_ask_cylinder_params
+  - action_handle_measurements
 
 session_config:
   session_expiration_time: 60

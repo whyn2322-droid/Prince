@@ -1,232 +1,223 @@
-from typing import Any, Dict, List, Text, Optional
 import math
-import re
+from typing import Any, Dict, List
 
 from rasa_sdk import Action, Tracker
+from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.forms import FormValidationAction
-from rasa_sdk.events import AllSlotsReset
-
-POSITIVE_NUMBER_MESSAGE = "Эерэг тоо оруулна уу. (ж: 5 эсвэл 3.5)"
 
 
-def _parse_number(text: str) -> Optional[float]:
+def _parse_numbers(text: str) -> List[float]:
     if not text:
-        return None
-    t = text.strip().replace(",", ".")
-    m = re.search(r"-?\d+(?:\.\d+)?", t)
-    if not m:
-        return None
-    try:
-        return float(m.group(0))
-    except Exception:
-        return None
+        return []
+    cleaned = []
+    allowed = set("0123456789.-")
+    for ch in text:
+        cleaned.append(ch if ch in allowed else " ")
+    numbers: List[float] = []
+    for part in "".join(cleaned).split():
+        try:
+            numbers.append(float(part))
+        except ValueError:
+            continue
+    return numbers
 
 
-def _positive(x: Optional[float]) -> bool:
-    return x is not None and x > 0
+class ActionAskSquareSide(Action):
+    def name(self) -> str:
+        return "action_ask_square_side"
 
-
-def _fmt_num(value: float) -> str:
-    return f"{value:g}"
-
-
-def _get_slot_float(tracker: Tracker, slot_name: Text) -> Optional[float]:
-    value = tracker.get_slot(slot_name)
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return None
-
-
-def _require_positive_slots(
-    dispatcher: CollectingDispatcher, tracker: Tracker, slot_names: List[Text]
-) -> Optional[List[float]]:
-    values: List[float] = []
-    for slot_name in slot_names:
-        num = _get_slot_float(tracker, slot_name)
-        if not _positive(num):
-            dispatcher.utter_message(text=POSITIVE_NUMBER_MESSAGE)
-            return None
-        values.append(num)
-    return values
-
-
-class ValidateAreaForm(FormValidationAction):
-    def name(self) -> Text:
-        return "validate_area_form"
-
-    async def required_slots(
+    def run(
         self,
-        slots_mapped_in_domain: List[Text],
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Text]:
-        shape = tracker.get_slot("shape")
-
-        if not shape:
-            return ["shape"]
-
-        if shape == "rectangle":
-            return ["shape", "length", "width"]
-        if shape == "circle":
-            return ["shape", "radius"]
-        if shape == "triangle":
-            return ["shape", "base", "height"]
-        if shape == "trapezoid":
-            return ["shape", "b1", "b2", "height"]
-        if shape == "parallelogram":
-            return ["shape", "base", "height"]
-
-        return ["shape"]
-
-    def validate_shape(self, value: Text, dispatcher, tracker, domain) -> Dict[Text, Any]:
-        if not value:
-            dispatcher.utter_message(text="Дүрсээ сонгоно уу.")
-            return {"shape": None}
-
-        v = value.strip().lower()
-
-        mapping = {
-            "дөрвөлжин": "rectangle",
-            "тэгш өнцөгт": "rectangle",
-            "rectangle": "rectangle",
-            "тойрог": "circle",
-            "circle": "circle",
-            "гурвалжин": "triangle",
-            "triangle": "triangle",
-            "трапец": "trapezoid",
-            "trapezoid": "trapezoid",
-            "параллелограмм": "parallelogram",
-            "parallelogram": "parallelogram",
-        }
-
-        shape = mapping.get(v, v)
-        if shape not in ["rectangle", "circle", "triangle", "trapezoid", "parallelogram"]:
-            return {"shape": None}
-
-        # шинэ дүрс сонгоход өмнөх хэмжээсүүдийг цэвэрлэх
-        return {
-            "shape": shape,
-            "length": None, "width": None,
-            "radius": None,
-            "base": None, "height": None,
-            "b1": None, "b2": None,
-        }
-
-    def _validate_pos(self, slot_name: Text, dispatcher: CollectingDispatcher, value: Any) -> Dict[Text, Any]:
-        num = _parse_number(str(value))
-        if not _positive(num):
-            dispatcher.utter_message(text=POSITIVE_NUMBER_MESSAGE)
-            return {slot_name: None}
-        return {slot_name: float(num)}
-
-    def validate_length(self, value: Any, dispatcher, tracker, domain):
-        return self._validate_pos("length", dispatcher, value)
-
-    def validate_width(self, value: Any, dispatcher, tracker, domain):
-        return self._validate_pos("width", dispatcher, value)
-
-    def validate_radius(self, value: Any, dispatcher, tracker, domain):
-        return self._validate_pos("radius", dispatcher, value)
-
-    def validate_base(self, value: Any, dispatcher, tracker, domain):
-        return self._validate_pos("base", dispatcher, value)
-
-    def validate_height(self, value: Any, dispatcher, tracker, domain):
-        return self._validate_pos("height", dispatcher, value)
-
-    def validate_b1(self, value: Any, dispatcher, tracker, domain):
-        return self._validate_pos("b1", dispatcher, value)
-
-    def validate_b2(self, value: Any, dispatcher, tracker, domain):
-        return self._validate_pos("b2", dispatcher, value)
+        domain: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        dispatcher.utter_message(response="utter_ask_square_side")
+        return [SlotSet("pending_calc", "square_area")]
 
 
-class ActionCalculateArea(Action):
-    def name(self) -> Text:
-        return "action_calculate_area"
+class ActionAskRectangleSides(Action):
+    def name(self) -> str:
+        return "action_ask_rectangle_sides"
 
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        shape = tracker.get_slot("shape")
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        dispatcher.utter_message(response="utter_ask_rectangle_sides")
+        return [SlotSet("pending_calc", "rectangle_area")]
 
-        if shape == "rectangle":
-            values = _require_positive_slots(dispatcher, tracker, ["length", "width"])
-            if not values:
+
+class ActionAskCubeSide(Action):
+    def name(self) -> str:
+        return "action_ask_cube_side"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        dispatcher.utter_message(response="utter_ask_cube_side")
+        return [SlotSet("pending_calc", "cube_volume")]
+
+
+class ActionAskSphereRadius(Action):
+    def name(self) -> str:
+        return "action_ask_sphere_radius"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        dispatcher.utter_message(response="utter_ask_sphere_radius")
+        return [SlotSet("pending_calc", "sphere_volume")]
+
+
+class ActionAskConeParams(Action):
+    def name(self) -> str:
+        return "action_ask_cone_params"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        dispatcher.utter_message(response="utter_ask_cone_params")
+        return [SlotSet("pending_calc", "cone_volume")]
+
+
+class ActionAskCylinderParams(Action):
+    def name(self) -> str:
+        return "action_ask_cylinder_params"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        dispatcher.utter_message(response="utter_ask_cylinder_params")
+        return [SlotSet("pending_calc", "cylinder_volume")]
+
+
+class ActionHandleMeasurements(Action):
+    def name(self) -> str:
+        return "action_handle_measurements"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        pending = tracker.get_slot("pending_calc")
+        numbers = _parse_numbers(tracker.latest_message.get("text", ""))
+
+        if not pending:
+            dispatcher.utter_message(response="utter_ask_calc_type")
+            return []
+
+        if pending == "square_area":
+            if len(numbers) < 1:
+                dispatcher.utter_message(response="utter_ask_square_side")
                 return []
-            length, width = values
+            side = numbers[0]
+            if side <= 0:
+                dispatcher.utter_message(text="Талын урт 0-ээс их байх хэрэгтэй.")
+                return []
+            area = side * side
+            dispatcher.utter_message(
+                text=f"Квадратын талбай: S = a^2 = {side}^2 = {area}"
+            )
+            return [SlotSet("pending_calc", None)]
+
+        if pending == "rectangle_area":
+            if len(numbers) < 2:
+                dispatcher.utter_message(response="utter_ask_rectangle_sides")
+                return []
+            length, width = numbers[0], numbers[1]
+            if length <= 0 or width <= 0:
+                dispatcher.utter_message(text="Урт ба өргөн 0-ээс их байх хэрэгтэй.")
+                return []
             area = length * width
             dispatcher.utter_message(
                 text=(
-                    "Тэгш өнцөгт: "
-                    f"S = урт x өргөн = {_fmt_num(length)} x {_fmt_num(width)} = {_fmt_num(area)}"
+                    f"Тэгш өнцөгтийн талбай: "
+                    f"S = a*b = {length}*{width} = {area}"
                 )
             )
+            return [SlotSet("pending_calc", None)]
 
-        elif shape == "circle":
-            values = _require_positive_slots(dispatcher, tracker, ["radius"])
-            if not values:
+        if pending == "cube_volume":
+            if len(numbers) < 1:
+                dispatcher.utter_message(response="utter_ask_cube_side")
                 return []
-            r = values[0]
-            area = math.pi * r * r
+            side = numbers[0]
+            if side <= 0:
+                dispatcher.utter_message(text="Талын урт 0-ээс их байх хэрэгтэй.")
+                return []
+            volume = side ** 3
+            dispatcher.utter_message(
+                text=f"Кубын эзэлхүүн: V = a^3 = {side}^3 = {volume}"
+            )
+            return [SlotSet("pending_calc", None)]
+
+        if pending == "sphere_volume":
+            if len(numbers) < 1:
+                dispatcher.utter_message(response="utter_ask_sphere_radius")
+                return []
+            radius = numbers[0]
+            if radius <= 0:
+                dispatcher.utter_message(text="Радиус 0-ээс их байх хэрэгтэй.")
+                return []
+            volume = (4.0 / 3.0) * math.pi * (radius ** 3)
             dispatcher.utter_message(
                 text=(
-                    "Тойрог: "
-                    f"S = pi * r^2 = pi * {_fmt_num(r)}^2 = {_fmt_num(area)}"
+                    f"Бөмбөрцгийн эзэлхүүн: "
+                    f"V = 4/3*pi*r^3 = {volume}"
                 )
             )
+            return [SlotSet("pending_calc", None)]
 
-        elif shape == "triangle":
-            values = _require_positive_slots(dispatcher, tracker, ["base", "height"])
-            if not values:
+        if pending == "cone_volume":
+            if len(numbers) < 2:
+                dispatcher.utter_message(response="utter_ask_cone_params")
                 return []
-            base, height = values
-            area = 0.5 * base * height
+            radius, height = numbers[0], numbers[1]
+            if radius <= 0 or height <= 0:
+                dispatcher.utter_message(text="Радиус ба өндөр 0-ээс их байх хэрэгтэй.")
+                return []
+            volume = (1.0 / 3.0) * math.pi * (radius ** 2) * height
             dispatcher.utter_message(
                 text=(
-                    "Гурвалжин: "
-                    "S = 0.5 * суурь * өндөр = "
-                    f"0.5 * {_fmt_num(base)} * {_fmt_num(height)} = {_fmt_num(area)}"
+                    f"Конусын эзэлхүүн: "
+                    f"V = 1/3*pi*r^2*h = {volume}"
                 )
             )
+            return [SlotSet("pending_calc", None)]
 
-        elif shape == "trapezoid":
-            values = _require_positive_slots(dispatcher, tracker, ["b1", "b2", "height"])
-            if not values:
+        if pending == "cylinder_volume":
+            if len(numbers) < 2:
+                dispatcher.utter_message(response="utter_ask_cylinder_params")
                 return []
-            b1, b2, h = values
-            area = (b1 + b2) * h / 2.0
+            radius, height = numbers[0], numbers[1]
+            if radius <= 0 or height <= 0:
+                dispatcher.utter_message(text="Радиус ба өндөр 0-ээс их байх хэрэгтэй.")
+                return []
+            volume = math.pi * (radius ** 2) * height
             dispatcher.utter_message(
                 text=(
-                    "Трапец: "
-                    "S = (b1 + b2) * h / 2 = "
-                    f"({_fmt_num(b1)} + {_fmt_num(b2)}) * {_fmt_num(h)} / 2 = {_fmt_num(area)}"
+                    f"Цилиндрийн эзэлхүүн: "
+                    f"V = pi*r^2*h = {volume}"
                 )
             )
+            return [SlotSet("pending_calc", None)]
 
-        elif shape == "parallelogram":
-            values = _require_positive_slots(dispatcher, tracker, ["base", "height"])
-            if not values:
-                return []
-            base, height = values
-            area = base * height
-            dispatcher.utter_message(
-                text=(
-                    "Параллелограмм: "
-                    f"S = суурь * өндөр = {_fmt_num(base)} * {_fmt_num(height)} = {_fmt_num(area)}"
-                )
-            )
-
-        else:
-            dispatcher.utter_message(text="Дүрс сонгогдоогүй байна. 'дүрсний талбай ол' гэж дахин эхлүүлээрэй.")
-
+        dispatcher.utter_message(response="utter_ask_calc_type")
         return []
-
-
-class ActionResetArea(Action):
-    def name(self) -> Text:
-        return "action_reset_area"
-
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        return [AllSlotsReset()]

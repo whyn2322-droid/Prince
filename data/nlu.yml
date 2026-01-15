@@ -5,68 +5,122 @@ nlu:
   examples: |
     - сайн уу
     - сайн байна уу
-    - hello
-    - hi
+    - мэнд байна уу
+    - мэнд
+    - мэндээ
+    - өглөөний мэнд
+    - оройн мэнд
+    - сайн уу найз аа
 
 - intent: goodbye
   examples: |
     - баяртай
-    - bye
+    - баяртай байгаарай
+    - түр баяртай
+    - дараа уулзъя
+    - удахгүй уулзъя
+    - сайхан амраарай
+    - сайхан өдөртэй байгаарай
+    - шөнөний мэнд
 
-- intent: ask_area
+- intent: affirm
   examples: |
-    - дүрсний талбай ол
-    - талбай бод
-    - талбай ол
+    - тийм
+    - тийм ээ
+    - мэдээж
+    - тийм байна
+    - зөв
+    - тэгье
 
-- intent: restart_area
+- intent: deny
   examples: |
-    - дахин эхэлье
-    - шинээр эхэлье
-    - эхнээс нь
-    - дахин эхлэх
-    - restart
-    - дахин эхлүүл
+    - үгүй
+    - үгүй ээ
+    - болохгүй
+    - тийм биш
+    - санал нийлэхгүй байна
+    - надад таалагдахгүй байна
+    - огт үгүй
 
-# ✅ ЭНЭ ХЭСЭГ ЧУХАЛ: "трапец" ганцаараа ирэхэд choose_shape гэж 100% дөхнө
-- intent: choose_shape
+- intent: mood_great
   examples: |
-    - [дөрвөлжин]{"entity":"shape","value":"rectangle"}
-    - [тэгш өнцөгт]{"entity":"shape","value":"rectangle"}
-    - [тойрог]{"entity":"shape","value":"circle"}
-    - [гурвалжин]{"entity":"shape","value":"triangle"}
-    - [трапец]{"entity":"shape","value":"trapezoid"}
-    - [параллелограмм]{"entity":"shape","value":"parallelogram"}
-    - би [трапец]{"entity":"shape","value":"trapezoid"} сонгоё
-    - [гурвалжин]{"entity":"shape","value":"triangle"}-ы талбай
-    - [параллелограмм]{"entity":"shape","value":"parallelogram"} сонгох
-    - [тойрог]{"entity":"shape","value":"circle"} сонгоё
-    - [дөрвөлжин]{"entity":"shape","value":"rectangle"} талбай
-- intent: inform
+    - маш сайн байна
+    - гайхалтай
+    - төгс байна
+    - супер байна
+    - үнэхээр сайхан байна
+    - сэтгэл үнэхээр өөдрөг байна
+    - би маш сайн байна
+    - бүх зүйл гайхалтай байна
+
+- intent: mood_unhappy
+  examples: |
+    - өнөөдөр муухай өдөр байлаа
+    - гунигтай байна
+    - би тааруухан байна
+    - сэтгэл гонсойж байна
+    - маш гунигтай байна
+    - тийм ч сайн биш байна
+    - таагүй байна
+    - сэтгэл санаа муу байна
+
+- intent: bot_challenge
+  examples: |
+    - чи бот уу?
+    - чи хүн үү?
+    - би боттой ярьж байна уу?
+    - би хүнтэй ярьж байна уу?
+
+- intent: calc_square_area
+  examples: |
+    - квадратын талбай ол
+    - квадратын талбай бод
+    - дөрвөлжний талбай ол
+    - square area
+
+- intent: calc_rectangle_area
+  examples: |
+    - тэгш өнцөгтийн талбай ол
+    - тэгш өнцөгтийн талбай бод
+    - rectangle area
+
+- intent: calc_cube_volume
+  examples: |
+    - кубын эзэлхүүн ол
+    - кубын эзэлхүүн бод
+    - куб эзэлхүүн
+    - cube volume
+
+- intent: calc_sphere_volume
+  examples: |
+    - бөмбөрцгийн эзэлхүүн ол
+    - бөмбөрцгийн эзэлхүүн бод
+    - бөмбөрцөг эзэлхүүн
+    - sphere volume
+
+- intent: calc_cone_volume
+  examples: |
+    - конусын эзэлхүүн ол
+    - конусын эзэлхүүн бод
+    - конус эзэлхүүн
+    - cone volume
+
+- intent: calc_cylinder_volume
+  examples: |
+    - цилиндрийн эзэлхүүн ол
+    - цилиндрийн эзэлхүүн бод
+    - цилиндр эзэлхүүн
+    - cylinder volume
+
+- intent: inform_measurements
   examples: |
     - 5
-    - 3
-    - 10
-    - 4.5
-    - 6,2
-
-- synonym: rectangle
-  examples: |
-    - дөрвөлжин
-    - тэгш өнцөгт
-
-- synonym: circle
-  examples: |
-    - тойрог
-
-- synonym: triangle
-  examples: |
-    - гурвалжин
-
-- synonym: trapezoid
-  examples: |
-    - трапец
-
-- synonym: parallelogram
-  examples: |
-    - параллелограмм
+    - 7.5
+    - a=5
+    - r=3
+    - h=5
+    - r=3 h=5
+    - 3 5
+    - тал нь 4
+    - радиус 3 өндөр 5
+    - урт 6 өргөн 2
