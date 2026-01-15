@@ -1,0 +1,111 @@
+version: "3.1"
+
+rules:
+  - rule: Greet
+    steps:
+      - intent: greet
+      - action: utter_greet
+
+  - rule: Goodbye
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye
+
+  - rule: Simplify expression
+    steps:
+      - intent: ask_expression_simplify
+      - action: simplify_expression_form
+      - active_loop: simplify_expression_form
+
+  - rule: Submit simplify expression
+    condition:
+      - active_loop: simplify_expression_form
+    steps:
+      - action: simplify_expression_form
+      - active_loop: null
+      - action: action_simplify_expression
+
+  - rule: Expand brackets
+    steps:
+      - intent: ask_expand_brackets
+      - action: expand_brackets_form
+      - active_loop: expand_brackets_form
+
+  - rule: Submit expand brackets
+    condition:
+      - active_loop: expand_brackets_form
+    steps:
+      - action: expand_brackets_form
+      - active_loop: null
+      - action: action_expand_brackets
+
+  - rule: Combine like terms
+    steps:
+      - intent: ask_combine_like_terms
+      - action: combine_like_terms_form
+      - active_loop: combine_like_terms_form
+
+  - rule: Submit combine like terms
+    condition:
+      - active_loop: combine_like_terms_form
+    steps:
+      - action: combine_like_terms_form
+      - active_loop: null
+      - action: action_combine_like_terms
+
+  - rule: Solve linear equation
+    steps:
+      - intent: ask_linear_equation
+      - action: linear_equation_form
+      - active_loop: linear_equation_form
+
+  - rule: Submit linear equation
+    condition:
+      - active_loop: linear_equation_form
+    steps:
+      - action: linear_equation_form
+      - active_loop: null
+      - action: action_solve_linear_equation
+
+  - rule: Solve inequality
+    steps:
+      - intent: ask_inequality_basic
+      - action: inequality_form
+      - active_loop: inequality_form
+
+  - rule: Submit inequality
+    condition:
+      - active_loop: inequality_form
+    steps:
+      - action: inequality_form
+      - active_loop: null
+      - action: action_solve_inequality
+
+  - rule: Polygon angles
+    steps:
+      - intent: ask_polygon
+      - action: polygon_form
+      - active_loop: polygon_form
+
+  - rule: Submit polygon angles
+    condition:
+      - active_loop: polygon_form
+    steps:
+      - action: polygon_form
+      - active_loop: null
+      - action: action_polygon_angles
+
+  - rule: Angle rules
+    steps:
+      - intent: ask_angle_rules
+      - action: utter_angle_rules
+
+  - rule: Capabilities
+    steps:
+      - intent: ask_capabilities
+      - action: utter_capabilities
+
+  - rule: Out of scope
+    steps:
+      - intent: out_of_scope
+      - action: utter_out_of_scope

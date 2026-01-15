@@ -1,0 +1,121 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - ask_expression_simplify
+  - ask_expand_brackets
+  - ask_combine_like_terms
+  - ask_linear_equation
+  - ask_inequality_basic
+  - ask_angle_rules
+  - ask_polygon
+  - ask_capabilities
+  - out_of_scope
+
+slots:
+  simplify_expression:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: simplify_expression_form
+            requested_slot: simplify_expression
+  expand_expression:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: expand_brackets_form
+            requested_slot: expand_expression
+  combine_expression:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: combine_like_terms_form
+            requested_slot: combine_expression
+  equation:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: linear_equation_form
+            requested_slot: equation
+  inequality:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: inequality_form
+            requested_slot: inequality
+  polygon_sides:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: polygon_form
+            requested_slot: polygon_sides
+
+forms:
+  simplify_expression_form:
+    required_slots:
+      - simplify_expression
+  expand_brackets_form:
+    required_slots:
+      - expand_expression
+  combine_like_terms_form:
+    required_slots:
+      - combine_expression
+  linear_equation_form:
+    required_slots:
+      - equation
+  inequality_form:
+    required_slots:
+      - inequality
+  polygon_form:
+    required_slots:
+      - polygon_sides
+
+responses:
+  utter_greet:
+    - text: "Сайн уу! Би математикийн бодлого бодож, тайлбарлаж өгнө. Ямар сэдэв сонирхож байна?"
+  utter_goodbye:
+    - text: "Баяртай!"
+  utter_ask_simplify_expression:
+    - text: "Ямар илэрхийллийг хялбаршуулах вэ? Ж: 2(x+3)-x"
+  utter_ask_expand_expression:
+    - text: "Ямар илэрхийллийг хаалт задлах вэ? Ж: 3(x-2)"
+  utter_ask_combine_expression:
+    - text: "Ямар илэрхийллийг адил гишүүн нэгтгэх вэ? Ж: 2x+3x-x+5"
+  utter_ask_equation:
+    - text: "Ямар тэгшитгэлийг бодох вэ? Ж: 2x+3=7"
+  utter_ask_inequality:
+    - text: "Ямар тэнцэтгэл бишийг бодох вэ? Ж: -2x+1>5"
+  utter_ask_polygon_sides:
+    - text: "Олон өнцөгтийн талын тоо хэд вэ? (n >= 3)"
+  utter_angle_rules:
+    - text: "Өнцгийн суурь дүрэм: босоо өнцгүүд тэнцүү; хөрш өнцгүүдийн нийлбэр 180 градус; бүрэн өнцөг 360 градус."
+  utter_capabilities:
+    - text: "Би дараах сэдвүүдийг бодож, тайлбарлаж чадна: илэрхийлэл хялбаршуулах, хаалт задлах, адил гишүүн нэгтгэх, ax+b=c тэгшитгэл, тэнцэтгэл биш (суурь), өнцгийн дүрэм, олон өнцөгтийн өнцөг."
+  utter_out_of_scope:
+    - text: "Уучлаарай, энэ асуулт миний сэдэвт хамаарахгүй байна."
+
+actions:
+  - action_simplify_expression
+  - action_expand_brackets
+  - action_combine_like_terms
+  - action_solve_linear_equation
+  - action_solve_inequality
+  - action_polygon_angles
+  - validate_polygon_form
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: false

@@ -1,0 +1,10 @@
+version: "3.1"
+
+stories:
+  - story: greet and simplify
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_expression_simplify
+      - action: simplify_expression_form
+      - active_loop: simplify_expression_form
