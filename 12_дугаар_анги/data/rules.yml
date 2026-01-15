@@ -1,0 +1,74 @@
+﻿version: "3.1"
+
+rules:
+- rule: greet only when no form
+  condition:
+    - active_loop: null
+  steps:
+    - intent: greet
+    - action: utter_greet
+
+- rule: say goodbye
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: start math12 form
+  steps:
+    - intent: ask_math
+    - action: math12_form
+    - active_loop: math12_form
+
+- rule: choose topic starts form
+  steps:
+    - intent: choose_topic
+    - action: math12_form
+    - active_loop: math12_form
+
+- rule: fill numbers while math12 form
+  condition:
+    - active_loop: math12_form
+  steps:
+    - intent: inform
+    - action: math12_form
+    - active_loop: math12_form
+
+- rule: fill integral kind while math12 form
+  condition:
+    - active_loop: math12_form
+  steps:
+    - intent: choose_integral_kind
+    - action: math12_form
+    - active_loop: math12_form
+
+- rule: fill integral func while math12 form
+  condition:
+    - active_loop: math12_form
+  steps:
+    - intent: choose_integral_func
+    - action: math12_form
+    - active_loop: math12_form
+
+- rule: fill comb type while math12 form
+  condition:
+    - active_loop: math12_form
+  steps:
+    - intent: choose_comb_type
+    - action: math12_form
+    - active_loop: math12_form
+
+- rule: submit math12 form
+  condition:
+    - active_loop: math12_form
+  steps:
+    - action: math12_form
+    - active_loop: null
+    - action: action_calculate_math12
+    - action: action_reset_math12
+
+- rule: restart math12
+  steps:
+    - intent: restart_math
+    - action: action_reset_math12
+    - action: math12_form
+    - active_loop: math12_form

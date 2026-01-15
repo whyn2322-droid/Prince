@@ -1,0 +1,349 @@
+﻿version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - ask_math
+  - choose_topic
+  - choose_integral_kind
+  - choose_integral_func
+  - choose_comb_type
+  - inform
+  - restart_math
+
+entities:
+  - topic
+  - integral_kind
+  - integral_func
+  - comb_type
+
+slots:
+  topic:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: topic
+        conditions:
+          - active_loop: math12_form
+            requested_slot: topic
+      - type: from_text
+        intent: choose_topic
+        conditions:
+          - active_loop: math12_form
+            requested_slot: topic
+
+  integral_kind:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: integral_kind
+        conditions:
+          - active_loop: math12_form
+            requested_slot: integral_kind
+      - type: from_text
+        intent: choose_integral_kind
+        conditions:
+          - active_loop: math12_form
+            requested_slot: integral_kind
+
+  integral_func:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: integral_func
+        conditions:
+          - active_loop: math12_form
+            requested_slot: integral_func
+      - type: from_text
+        intent: choose_integral_func
+        conditions:
+          - active_loop: math12_form
+            requested_slot: integral_func
+
+  comb_type:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: comb_type
+        conditions:
+          - active_loop: math12_form
+            requested_slot: comb_type
+      - type: from_text
+        intent: choose_comb_type
+        conditions:
+          - active_loop: math12_form
+            requested_slot: comb_type
+
+  int_coeff:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: int_coeff
+
+  int_power:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: int_power
+
+  int_a:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: int_a
+
+  int_b:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: int_b
+
+  int_expr:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: int_expr
+
+  quad_a:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: quad_a
+
+  quad_b:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: quad_b
+
+  quad_c:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: quad_c
+
+  param_a:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: param_a
+
+  param_b:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: param_b
+
+  comb_n:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: comb_n
+
+  comb_r:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: comb_r
+
+  prob_a:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: prob_a
+
+  prob_b:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: prob_b
+
+  prob_intersection:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math12_form
+            requested_slot: prob_intersection
+
+responses:
+  utter_greet:
+    - text: "Сайн уу! 12-р ангийн бодлого бодъё. 'интеграл бодлого' гэх мэт бичиж эхлүүлээрэй."
+
+  utter_goodbye:
+    - text: "Амжилт хүсье!"
+
+  utter_how_to_start:
+    - text: "Эхлүүлэхийн тулд: 'интеграл бодлого', 'комбинаторик бодлого' гэх мэт бичээрэй."
+
+  utter_ask_topic:
+    - text: "Ямар сэдвийн бодлого бодох вэ?"
+      buttons:
+        - title: "Интеграл"
+          payload: '/choose_topic{{"topic":"integral"}}'
+        - title: "Функцийн иж бүрэн шинжилгээ"
+          payload: '/choose_topic{{"topic":"analysis"}}'
+        - title: "Параметртэй тэгшитгэл"
+          payload: '/choose_topic{{"topic":"parameter"}}'
+        - title: "Комбинаторик"
+          payload: '/choose_topic{{"topic":"combinatorics"}}'
+        - title: "Магадлалын нэгтгэл"
+          payload: '/choose_topic{{"topic":"probability"}}'
+
+  utter_ask_integral_kind:
+    - text: "Интегралын төрлийг сонгоно уу."
+      buttons:
+        - title: "Үл тодорхой интеграл"
+          payload: '/choose_integral_kind{{"integral_kind":"indefinite"}}'
+        - title: "Тодорхой интеграл"
+          payload: '/choose_integral_kind{{"integral_kind":"definite"}}'
+
+  utter_ask_integral_func:
+    - text: "Интегралын функцийн төрлийг сонгоно уу."
+      buttons:
+        - title: "a*x^n"
+          payload: '/choose_integral_func{{"integral_func":"power"}}'
+        - title: "a/x"
+          payload: '/choose_integral_func{{"integral_func":"reciprocal"}}'
+        - title: "Илэрхийлэл"
+          payload: '/choose_integral_func{{"integral_func":"expression"}}'
+
+  utter_ask_int_expr:
+    - text: "Enter expression (e.g., x*e^x, x*sin(x), x^2*ln(x), 1/(x^2-1), 2*x3+4*x)"
+
+  utter_ask_int_coeff:
+    - text: "Коэффициент a хэд вэ? (ж: 2)"
+  utter_ask_int_power:
+    - text: "n хэд вэ? (n нь бүхэл, -1 биш)"
+  utter_ask_int_a:
+    - text: "Доод хязгаар a хэд вэ? (ж: 1)"
+  utter_ask_int_b:
+    - text: "Дээд хязгаар b хэд вэ? (ж: 4)"
+
+  utter_ask_quad_a:
+    - text: "a хэд вэ? (ax^2 + bx + c), a ≠ 0"
+  utter_ask_quad_b:
+    - text: "b хэд вэ?"
+  utter_ask_quad_c:
+    - text: "c хэд вэ?"
+
+  utter_ask_param_a:
+    - text: "a хэд вэ? (ax + b = 0)"
+  utter_ask_param_b:
+    - text: "b хэд вэ?"
+
+  utter_ask_comb_type:
+    - text: "Комбинаторикийн ямар бодлого бодох вэ?"
+      buttons:
+        - title: "Факториал (n!)"
+          payload: '/choose_comb_type{{"comb_type":"factorial"}}'
+        - title: "Байрлал P(n,r)"
+          payload: '/choose_comb_type{{"comb_type":"permutation"}}'
+        - title: "Хослол C(n,r)"
+          payload: '/choose_comb_type{{"comb_type":"combination"}}'
+
+  utter_ask_comb_n:
+    - text: "n хэд вэ? (0 эсвэл эерэг бүхэл)"
+  utter_ask_comb_r:
+    - text: "r хэд вэ? (0 ≤ r ≤ n)"
+
+  utter_ask_prob_a:
+    - text: "P(A) хэд вэ? (ж: 0.3 эсвэл 30)"
+  utter_ask_prob_b:
+    - text: "P(B) хэд вэ? (ж: 0.4 эсвэл 40)"
+  utter_ask_prob_intersection:
+    - text: "P(A∩B) хэд вэ? (ж: 0.1 эсвэл 10)"
+
+forms:
+  math12_form:
+    required_slots:
+      - topic
+      - integral_kind
+      - integral_func
+      - int_coeff
+      - int_power
+      - int_a
+      - int_b
+      - int_expr
+      - quad_a
+      - quad_b
+      - quad_c
+      - param_a
+      - param_b
+      - comb_type
+      - comb_n
+      - comb_r
+      - prob_a
+      - prob_b
+      - prob_intersection
+
+actions:
+  - validate_math12_form
+  - action_calculate_math12
+  - action_reset_math12
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

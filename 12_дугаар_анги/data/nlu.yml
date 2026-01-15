@@ -1,0 +1,98 @@
+﻿version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - сайн уу
+    - сайн байна уу
+    - сайн уу?
+    - hello
+
+- intent: goodbye
+  examples: |
+    - баяртай
+    - түр баяртай
+    - bye
+
+- intent: ask_math
+  examples: |
+    - 12-р ангийн бодлого бодъё
+    - интеграл бодлого бодъё
+    - параметртэй тэгшитгэл бодлого
+    - комбинаторик бодлого бодъё
+    - магадлалын бодлого
+    - функцийн иж бүрэн шинжилгээ бодъё
+
+- intent: restart_math
+  examples: |
+    - дахин эхэлье
+    - шинээр эхэлье
+    - эхнээс нь
+    - restart
+    - дахин эхлүүл
+
+- intent: choose_topic
+  examples: |
+    - [интеграл]{"entity":"topic","value":"integral"}
+    - [функцийн иж бүрэн шинжилгээ]{"entity":"topic","value":"analysis"}
+    - [иж бүрэн шинжилгээ]{"entity":"topic","value":"analysis"}
+    - [параметртэй тэгшитгэл]{"entity":"topic","value":"parameter"}
+    - [параметртэй тэнцэтгэл биш]{"entity":"topic","value":"parameter"}
+    - [комбинаторик]{"entity":"topic","value":"combinatorics"}
+    - [магадлал]{"entity":"topic","value":"probability"}
+    - [статистик]{"entity":"topic","value":"probability"}
+
+- intent: choose_integral_kind
+  examples: |
+    - [үл тодорхой интеграл]{"entity":"integral_kind","value":"indefinite"}
+    - [тодорхой интеграл]{"entity":"integral_kind","value":"definite"}
+
+- intent: choose_integral_func
+  examples: |
+    - [x^n]{"entity":"integral_func","value":"power"}
+    - [a*x^n]{"entity":"integral_func","value":"power"}
+    - [1/x]{"entity":"integral_func","value":"reciprocal"}
+    - [a/x]{"entity":"integral_func","value":"reciprocal"}
+    - [Илэрхийлэл]{"entity":"integral_func","value":"expression"}
+    - [expression]{"entity":"integral_func","value":"expression"}
+
+- intent: choose_comb_type
+  examples: |
+    - [факториал]{"entity":"comb_type","value":"factorial"}
+    - [байрлал]{"entity":"comb_type","value":"permutation"}
+    - [пермутаци]{"entity":"comb_type","value":"permutation"}
+    - [хослол]{"entity":"comb_type","value":"combination"}
+    - [P(n,r)]{"entity":"comb_type","value":"permutation"}
+    - [C(n,r)]{"entity":"comb_type","value":"combination"}
+
+- intent: inform
+  examples: |
+    - 5
+    - 3
+    - 10
+    - -2
+    - 4.5
+    - 0.25
+    - 30
+    - 2*x^3+4*x
+    - 2*x3+4*x
+    - 6/x
+    - x^(-2)+3*x^2
+    - 4*sqrt(x)
+    - 4*sqrtx
+    - 1/(2*x)
+    - 7
+    - 3*x^(-1/2)
+    - x*e^x
+    - x*sin(x)
+    - x^2*ln(x)
+    - 1/(x^2-1)
+    - (2*x+3)/((x+1)*(x+2))
+    - 1/(x*(x^2+1))
+    - x^2/(x^3+1)
+    - x/(x^2+4*x+5)
+    - Find I = int x*e^x dx
+    - Compute: int x*sin(x) dx
+    - Evaluate: int x^2*ln(x) dx
+    - Solve: int 1/(x^2-1) dx
+    - Integrate: int (2*x+3)/((x+1)*(x+2)) dx
