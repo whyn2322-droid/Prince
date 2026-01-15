@@ -1,0 +1,62 @@
+﻿version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - сайн уу
+    - сайн байна уу
+    - мэнд байна уу
+    - hello
+    - hi
+
+- intent: goodbye
+  examples: |
+    - баяртай
+    - түр баяртай
+    - баяртай гэж
+    - bye
+
+- intent: ask_math
+  examples: |
+    - 8-р анги бодлого бод
+    - 8-р ангийн бодлого
+    - 8-р анги math
+    - 8-р ангийн математик
+    - grade 8 math
+
+- intent: restart_math
+  examples: |
+    - дахин эхэлье
+    - шинээр эхэлье
+    - дахин эхэл
+    - restart
+
+- intent: choose_topic
+  examples: |
+    - [квадрат илэрхийлэл](topic){"entity":"topic","value":"identity"}
+    - [квадрат тэгшитгэл](topic){"entity":"topic","value":"quadratic"}
+    - [систем](topic){"entity":"topic","value":"system"}
+    - [тойрог](topic){"entity":"topic","value":"circle"}
+    - [тригонометр](topic){"entity":"topic","value":"trig"}
+    - [identity](topic){"entity":"topic","value":"identity"}
+    - [quadratic](topic){"entity":"topic","value":"quadratic"}
+    - [system](topic){"entity":"topic","value":"system"}
+    - [circle](topic){"entity":"topic","value":"circle"}
+    - [trig](topic){"entity":"topic","value":"trig"}
+
+- intent: choose_identity_type
+  examples: |
+    - [(a+b)^2](identity_type){"entity":"identity_type","value":"square_sum"}
+    - [(a-b)^2](identity_type){"entity":"identity_type","value":"square_diff"}
+    - [a^2-b^2](identity_type){"entity":"identity_type","value":"diff_squares"}
+    - [square sum](identity_type){"entity":"identity_type","value":"square_sum"}
+    - [square diff](identity_type){"entity":"identity_type","value":"square_diff"}
+    - [difference of squares](identity_type){"entity":"identity_type","value":"diff_squares"}
+
+- intent: inform
+  examples: |
+    - 5
+    - -2
+    - 3.5
+    - 10
+    - 0.25

@@ -1,0 +1,294 @@
+﻿version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - ask_math
+  - choose_topic
+  - choose_identity_type
+  - inform
+  - restart_math
+
+entities:
+  - topic
+  - identity_type
+
+slots:
+  topic:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: topic
+        conditions:
+          - active_loop: math8_form
+            requested_slot: topic
+      - type: from_text
+        intent: choose_topic
+        conditions:
+          - active_loop: math8_form
+            requested_slot: topic
+
+  identity_type:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: identity_type
+        conditions:
+          - active_loop: math8_form
+            requested_slot: identity_type
+      - type: from_text
+        intent: choose_identity_type
+        conditions:
+          - active_loop: math8_form
+            requested_slot: identity_type
+
+  id_a:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: id_a
+
+  id_b:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: id_b
+
+  quad_a:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: quad_a
+
+  quad_b:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: quad_b
+
+  quad_c:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: quad_c
+
+  sys_a1:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: sys_a1
+
+  sys_b1:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: sys_b1
+
+  sys_c1:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: sys_c1
+
+  sys_a2:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: sys_a2
+
+  sys_b2:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: sys_b2
+
+  sys_c2:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: sys_c2
+
+  circle_r:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: circle_r
+
+  trig_opp:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: trig_opp
+
+  trig_adj:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: trig_adj
+
+  trig_hyp:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math8_form
+            requested_slot: trig_hyp
+
+responses:
+  utter_greet:
+    - text: "Сайн уу! 8-р ангийн бодлого бодъё. '8-р анги бодлого бод' гэж бичээд эхлүүлээрэй."
+
+  utter_goodbye:
+    - text: "Баяртай!"
+
+  utter_how_to_start:
+    - text: "Жишээ: '8-р анги бодлого бод' гэж бичээрэй."
+
+  utter_ask_topic:
+    - text: "Аль сэдвээр бодох вэ?"
+      buttons:
+        - title: "Квадрат илэрхийлэл"
+          payload: '/choose_topic{{"topic":"identity"}}'
+        - title: "Квадрат тэгшитгэл"
+          payload: '/choose_topic{{"topic":"quadratic"}}'
+        - title: "Систем (2 хувьсагч)"
+          payload: '/choose_topic{{"topic":"system"}}'
+        - title: "Тойрог"
+          payload: '/choose_topic{{"topic":"circle"}}'
+        - title: "Тригонометр"
+          payload: '/choose_topic{{"topic":"trig"}}'
+
+  utter_ask_identity_type:
+    - text: "Ямар томьёо сонгох вэ?"
+      buttons:
+        - title: "(a+b)^2"
+          payload: '/choose_identity_type{{"identity_type":"square_sum"}}'
+        - title: "(a-b)^2"
+          payload: '/choose_identity_type{{"identity_type":"square_diff"}}'
+        - title: "a^2-b^2"
+          payload: '/choose_identity_type{{"identity_type":"diff_squares"}}'
+
+  utter_ask_id_a:
+    - text: "a хэд вэ?"
+  utter_ask_id_b:
+    - text: "b хэд вэ?"
+
+  utter_ask_quad_a:
+    - text: "a хэд вэ? (ax^2 + bx + c = 0)"
+  utter_ask_quad_b:
+    - text: "b хэд вэ?"
+  utter_ask_quad_c:
+    - text: "c хэд вэ?"
+
+  utter_ask_sys_a1:
+    - text: "1-р тэгшитгэлийн a1 хэд вэ? (a1*x + b1*y = c1)"
+  utter_ask_sys_b1:
+    - text: "1-р тэгшитгэлийн b1 хэд вэ?"
+  utter_ask_sys_c1:
+    - text: "1-р тэгшитгэлийн c1 хэд вэ?"
+  utter_ask_sys_a2:
+    - text: "2-р тэгшитгэлийн a2 хэд вэ? (a2*x + b2*y = c2)"
+  utter_ask_sys_b2:
+    - text: "2-р тэгшитгэлийн b2 хэд вэ?"
+  utter_ask_sys_c2:
+    - text: "2-р тэгшитгэлийн c2 хэд вэ?"
+
+  utter_ask_circle_r:
+    - text: "Тойргийн r хэд вэ?"
+
+  utter_ask_trig_opp:
+    - text: "Эсрэг тал (opposite) хэд вэ?"
+  utter_ask_trig_adj:
+    - text: "Хөрш тал (adjacent) хэд вэ?"
+  utter_ask_trig_hyp:
+    - text: "Гипотенуз (hypotenuse) хэд вэ?"
+
+forms:
+  math8_form:
+    required_slots:
+      - topic
+      - identity_type
+      - id_a
+      - id_b
+      - quad_a
+      - quad_b
+      - quad_c
+      - sys_a1
+      - sys_b1
+      - sys_c1
+      - sys_a2
+      - sys_b2
+      - sys_c2
+      - circle_r
+      - trig_opp
+      - trig_adj
+      - trig_hyp
+
+actions:
+  - validate_math8_form
+  - action_calculate_math8
+  - action_reset_math8
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

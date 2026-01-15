@@ -1,0 +1,58 @@
+version: "3.1"
+
+rules:
+- rule: greet only when no form
+  condition:
+    - active_loop: null
+  steps:
+    - intent: greet
+    - action: utter_greet
+
+- rule: say goodbye
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: start math8 form
+  steps:
+    - intent: ask_math
+    - action: math8_form
+    - active_loop: math8_form
+
+- rule: choose topic starts form
+  steps:
+    - intent: choose_topic
+    - action: math8_form
+    - active_loop: math8_form
+
+- rule: fill numbers while math8 form
+  condition:
+    - active_loop: math8_form
+  steps:
+    - intent: inform
+    - action: math8_form
+    - active_loop: math8_form
+
+- rule: fill identity type while math8 form
+  condition:
+    - active_loop: math8_form
+  steps:
+    - intent: choose_identity_type
+    - action: math8_form
+    - active_loop: math8_form
+
+- rule: submit math8 form
+  condition:
+    - active_loop: math8_form
+  steps:
+    - action: math8_form
+    - active_loop: null
+    - action: action_calculate_math8
+    - action: action_reset_math8
+
+- rule: restart math8
+  steps:
+    - intent: restart_math
+    - action: action_reset_math8
+    - action: math8_form
+    - active_loop: math8_form
