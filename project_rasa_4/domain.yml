@@ -1,0 +1,85 @@
+﻿version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - ask_capabilities
+  - ask_formulas
+  - ask_coordinate_geometry_help
+  - ask_line_equation
+  - ask_distance
+  - ask_midpoint
+  - ask_circle_equation
+  - ask_vector_help
+  - ask_vector_length
+  - ask_vector_sum
+  - ask_dot_product
+  - provide_points
+  - ask_derivative
+  - ask_limit
+  - ask_monotonicity
+  - ask_probability_advanced
+  - out_of_scope
+  - nlu_fallback
+
+responses:
+  utter_greet:
+    - text: "Сайн байна уу! Координатын геометр, вектор, уламжлал/предел, өсөх-буурах, экстремум болон магадлалын бодлого бодож тайлбарлана. Асуултаа өгнө үү."
+  utter_goodbye:
+    - text: "Баяртай! Амжилт хүсье."
+  utter_capabilities:
+    - text: |
+        Би дараахыг бодож, товч тайлбарлана:
+        - Шулуун (2 цэгээр, m ба b, эсвэл Ax+By+C=0)
+        - 2 цэгийн зай, дунд цэг
+        - Тойргийн тэгшитгэл
+        - Векторын урт, нийлбэр, скаляр үржвэр
+        - Уламжлал, предел (суурь жишээ)
+        - Квадрат функцийн өсөх/буурах, экстремум
+        - Магадлал: хослол, байрлал, Бернуллийн томьёо
+  utter_formulas:
+    - text: |
+        Гол томьёо (ASCII):
+        Шулуун: y = mx + b, эсвэл A x + B y + C = 0
+        Зай (2 цэг): d = sqrt((x2 - x1)^2 + (y2 - y1)^2)
+        Дунд цэг: ((x1 + x2)/2, (y1 + y2)/2)
+        Тойрог: (x - a)^2 + (y - b)^2 = r^2
+        Вектор урт: |v| = sqrt(x^2 + y^2)
+        Скаляр үржвэр: a dot b = |a||b|cos(theta) = x1*x2 + y1*y2
+        Уламжлал: (x^n)' = n x^(n-1), (sin x)' = cos x, (cos x)' = -sin x
+  utter_vector_help:
+    - text: |
+        Векторын сэдвээр дараахыг бодож өгнө:
+        - Урт: |v|, жишээ: (3,4)
+        - Нийлбэр: a+b, жишээ: (1,2) (3,4)
+        - Скаляр үржвэр: a dot b, жишээ: (1,2) (3,4)
+        Аль төрлийг нь бодох вэ?
+  utter_coordinate_geometry_help:
+    - text: |
+        Координатын геометрийн сэдвээр дараахыг бодож өгнө:
+        - Шулуун тэгшитгэл (2 цэгээр, m,b, эсвэл Ax+By+C=0)
+        - 2 цэгийн зай, дунд цэг
+        - Тойргийн тэгшитгэл
+        Аль хэсгээс эхлэх вэ?
+
+  utter_out_of_scope:
+    - text: "Энэ сэдвээр тусалж чадахгүй байна. Эдгээр сэдвээс асуугаарай: координатын геометр, вектор, уламжлал/предел, магадлал."
+
+actions:
+  - action_line_equation
+  - action_distance
+  - action_midpoint
+  - action_circle_equation
+  - action_vector_length
+  - action_vector_sum
+  - action_dot_product
+  - action_handle_point_followup
+  - action_handle_vector_followup
+  - action_derivative
+  - action_limit
+  - action_monotonicity
+  - action_probability_advanced
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: false

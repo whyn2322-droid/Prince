@@ -1,0 +1,24 @@
+/greet
+/ask_coordinate_geometry_help
+/ask_distance
+4,3 2,1
+/ask_midpoint
+1,2 4,6
+/ask_line_equation
+(1,2) (3,4)
+/ask_circle_equation
+center (2,3) r=4
+/ask_vector_help
+/ask_dot_product
+4,5 -1,-2
+/ask_vector_sum
+(1,2) (3,4)
+/ask_vector_length
+(3,4)
+/ask_derivative 3x2-4x
+/ask_limit x->0 sin(x)/x
+/ask_monotonicity y=x^2-4x+1
+/ask_probability_advanced C(5,2)
+/ask_probability_advanced bernoulli n=5 k=2 p=0.3
+/ask_formulas
+/stop

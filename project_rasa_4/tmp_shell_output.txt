@@ -1,0 +1,39 @@
+C:\project_rasa_3\.venv\lib\site-packages\rasa\core\tracker_store.py:1044: MovedIn20Warning: Deprecated API features detected! These feature(s) are not compatible with SQLAlchemy 2.0. To prevent incompatible upgrades prior to updating applications, ensure requirements files are pinned to "sqlalchemy<2.0". Set environment variable SQLALCHEMY_WARN_20=1 to show all deprecation warnings.  Set environment variable SQLALCHEMY_SILENCE_UBER_WARNING=1 to silence this message. (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  Base: DeclarativeMeta = declarative_base()
+C:\project_rasa_3\.venv\lib\site-packages\rasa\shared\utils\validation.py:134: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+  import pkg_resources
+C:\project_rasa_3\.venv\lib\site-packages\pkg_resources\__init__.py:3117: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace('mpl_toolkits')`.
+Implementing implicit namespace packages (as specified in PEP 420) is preferred to `pkg_resources.declare_namespace`. See https://setuptools.pypa.io/en/latest/references/keywords.html#keyword-namespace-packages
+  declare_namespace(pkg)
+C:\project_rasa_3\.venv\lib\site-packages\pkg_resources\__init__.py:3117: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace('ruamel')`.
+Implementing implicit namespace packages (as specified in PEP 420) is preferred to `pkg_resources.declare_namespace`. See https://setuptools.pypa.io/en/latest/references/keywords.html#keyword-namespace-packages
+  declare_namespace(pkg)
+C:\project_rasa_3\.venv\lib\site-packages\tensorflow\lite\python\util.py:52: DeprecationWarning: jax.xla_computation is deprecated. Please use the AOT APIs.
+  from jax import xla_computation as _xla_computation
+C:\project_rasa_3\.venv\lib\site-packages\matplotlib\fontconfig_pattern.py:66: DeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'
+  ).setParseAction(self._family)
+C:\project_rasa_3\.venv\lib\site-packages\matplotlib\fontconfig_pattern.py:127: DeprecationWarning: 'parseString' deprecated - use 'parse_string'
+  self._parser.parseString(pattern)
+C:\project_rasa_3\.venv\lib\site-packages\matplotlib\fontconfig_pattern.py:134: DeprecationWarning: 'resetCache' deprecated - use 'reset_cache'
+  self._parser.resetCache()
+C:\project_rasa_3\.venv\lib\site-packages\sanic_cors\extension.py:39: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+  SANIC_VERSION = LooseVersion(sanic_version)
+[93mC:\project_rasa_3\.venv\lib\site-packages\rasa\utils\train_utils.py:530: UserWarning: constrain_similarities is set to `False`. It is recommended to set it to `True` when using cross-entropy loss.
+  rasa.shared.utils.io.raise_warning(
+Bot loaded. Type a message and press enter (use '/stop' to exit): 
+[0m2026-01-15 16:59:29 [1;30mERROR   [0m [34masyncio[0m  - [31mTask exception was never retrieved
+future: <Task finished name='Task-9' coro=<SignalRouter._dispatch() done, defined at C:\project_rasa_3\.venv\lib\site-packages\sanic\signals.py:121> exception=NoConsoleScreenBufferError('No Windows console found. Are you running cmd.exe?')>[0m
+Traceback (most recent call last):
+  File "C:\project_rasa_3\.venv\lib\site-packages\sanic\signals.py", line 161, in _dispatch
+    retval = await maybe_coroutine
+  File "C:\project_rasa_3\.venv\lib\site-packages\sanic\app.py", line 1581, in run_delayed_task
+    await prepped
+  File "C:\project_rasa_3\.venv\lib\site-packages\rasa\core\run.py", line 168, in run_cmdline_io
+    await console.record_messages(
+  File "C:\project_rasa_3\.venv\lib\site-packages\rasa\core\channels\console.py", line 208, in record_messages
+    text = await _get_user_input(previous_response)
+  File "C:\project_rasa_3\.venv\lib\site-packages\rasa\core\channels\console.py", line 128, in _get_user_input
+    question = questionary.text(
+  File "C:\project_rasa_3\.venv\lib\site-packages\questionary\prompts\text.py", line 90, in text
+    p = PromptSession(
+  File "C:\pro

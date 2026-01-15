@@ -1,0 +1,235 @@
+﻿version: "3.1"
+
+rules:
+  - rule: Greet
+    steps:
+      - intent: greet
+      - action: utter_greet
+
+  - rule: Goodbye
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye
+
+  - rule: Capabilities
+    steps:
+      - intent: ask_capabilities
+      - action: utter_capabilities
+
+  - rule: Formulas
+    steps:
+      - intent: ask_formulas
+      - action: utter_formulas
+
+  - rule: Coordinate geometry help
+    steps:
+      - intent: ask_coordinate_geometry_help
+      - action: utter_coordinate_geometry_help
+
+  - rule: Line equation
+    steps:
+      - intent: ask_line_equation
+      - action: action_line_equation
+
+  - rule: Provide points for line equation
+    steps:
+      - action: action_line_equation
+      - intent: provide_points
+      - action: action_line_equation
+
+  - rule: Fallback points for line equation
+    steps:
+      - action: action_line_equation
+      - intent: out_of_scope
+      - action: action_handle_point_followup
+
+  - rule: NLU fallback points for line equation
+    steps:
+      - action: action_line_equation
+      - intent: nlu_fallback
+      - action: action_handle_point_followup
+
+  - rule: Distance
+    steps:
+      - intent: ask_distance
+      - action: action_distance
+
+  - rule: Provide points for distance
+    steps:
+      - action: action_distance
+      - intent: provide_points
+      - action: action_distance
+
+  - rule: Fallback points for distance
+    steps:
+      - action: action_distance
+      - intent: out_of_scope
+      - action: action_handle_point_followup
+
+  - rule: NLU fallback points for distance
+    steps:
+      - action: action_distance
+      - intent: nlu_fallback
+      - action: action_handle_point_followup
+
+  - rule: Midpoint
+    steps:
+      - intent: ask_midpoint
+      - action: action_midpoint
+
+  - rule: Provide points for midpoint
+    steps:
+      - action: action_midpoint
+      - intent: provide_points
+      - action: action_midpoint
+
+  - rule: Fallback points for midpoint
+    steps:
+      - action: action_midpoint
+      - intent: out_of_scope
+      - action: action_handle_point_followup
+
+  - rule: NLU fallback points for midpoint
+    steps:
+      - action: action_midpoint
+      - intent: nlu_fallback
+      - action: action_handle_point_followup
+
+  - rule: Circle equation
+    steps:
+      - intent: ask_circle_equation
+      - action: action_circle_equation
+
+  - rule: Provide input for circle equation
+    steps:
+      - action: action_circle_equation
+      - intent: provide_points
+      - action: action_circle_equation
+
+  - rule: Fallback circle equation
+    steps:
+      - action: action_circle_equation
+      - intent: out_of_scope
+      - action: action_circle_equation
+
+  - rule: NLU fallback circle equation
+    steps:
+      - action: action_circle_equation
+      - intent: nlu_fallback
+      - action: action_circle_equation
+
+  - rule: Vector help
+    steps:
+      - intent: ask_vector_help
+      - action: utter_vector_help
+
+  - rule: Vector length
+    steps:
+      - intent: ask_vector_length
+      - action: action_vector_length
+
+  - rule: Provide points for vector length
+    steps:
+      - action: action_vector_length
+      - intent: provide_points
+      - action: action_handle_vector_followup
+
+  - rule: Fallback vector length
+    steps:
+      - action: action_vector_length
+      - intent: out_of_scope
+      - action: action_handle_vector_followup
+
+  - rule: NLU fallback vector length
+    steps:
+      - action: action_vector_length
+      - intent: nlu_fallback
+      - action: action_handle_vector_followup
+
+  - rule: Vector sum
+    steps:
+      - intent: ask_vector_sum
+      - action: action_vector_sum
+
+  - rule: Provide points for vector sum
+    steps:
+      - action: action_vector_sum
+      - intent: provide_points
+      - action: action_handle_vector_followup
+
+  - rule: Fallback vector sum
+    steps:
+      - action: action_vector_sum
+      - intent: out_of_scope
+      - action: action_handle_vector_followup
+
+  - rule: NLU fallback vector sum
+    steps:
+      - action: action_vector_sum
+      - intent: nlu_fallback
+      - action: action_handle_vector_followup
+
+  - rule: Dot product
+    steps:
+      - intent: ask_dot_product
+      - action: action_dot_product
+
+  - rule: Provide points for dot product
+    steps:
+      - action: action_dot_product
+      - intent: provide_points
+      - action: action_handle_vector_followup
+
+  - rule: Fallback dot product
+    steps:
+      - action: action_dot_product
+      - intent: out_of_scope
+      - action: action_handle_vector_followup
+
+  - rule: NLU fallback dot product
+    steps:
+      - action: action_dot_product
+      - intent: nlu_fallback
+      - action: action_handle_vector_followup
+
+  - rule: Derivative
+    steps:
+      - intent: ask_derivative
+      - action: action_derivative
+
+  - rule: Limit
+    steps:
+      - intent: ask_limit
+      - action: action_limit
+
+  - rule: Monotonicity
+    steps:
+      - intent: ask_monotonicity
+      - action: action_monotonicity
+
+  - rule: Fallback monotonicity
+    steps:
+      - action: action_monotonicity
+      - intent: out_of_scope
+      - action: action_monotonicity
+
+  - rule: NLU fallback monotonicity
+    steps:
+      - action: action_monotonicity
+      - intent: nlu_fallback
+      - action: action_monotonicity
+
+  - rule: Probability advanced
+    steps:
+      - intent: ask_probability_advanced
+      - action: action_probability_advanced
+
+  - rule: Out of scope
+    steps:
+      - intent: out_of_scope
+      - action: utter_out_of_scope
+
+  - rule: NLU fallback
+    steps:
+      - intent: nlu_fallback
+      - action: utter_out_of_scope

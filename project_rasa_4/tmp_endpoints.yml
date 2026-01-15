@@ -1,0 +1,2 @@
+﻿action_endpoint:
+  url: "http://localhost:5056/webhook"
