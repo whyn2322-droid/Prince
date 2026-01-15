@@ -1,0 +1,88 @@
+﻿version: "3.1"
+
+rules:
+
+- rule: greet
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+- rule: goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: help
+  steps:
+  - intent: ask_help
+  - action: utter_help
+
+- rule: list topics
+  steps:
+  - intent: ask_topics
+  - action: utter_topics
+
+- rule: start function linear
+  steps:
+  - intent: topic_function_linear
+  - action: action_ask_function_linear
+
+- rule: start function quadratic
+  steps:
+  - intent: topic_function_quadratic
+  - action: action_ask_function_quadratic
+
+- rule: start function root
+  steps:
+  - intent: topic_function_root
+  - action: action_ask_function_root
+
+- rule: start function rational
+  steps:
+  - intent: topic_function_rational
+  - action: action_ask_function_rational
+
+- rule: start function absolute
+  steps:
+  - intent: topic_function_absolute
+  - action: action_ask_function_absolute
+
+- rule: start function composition
+  steps:
+  - intent: topic_function_composition
+  - action: action_ask_function_composition
+
+- rule: start trig unit circle
+  steps:
+  - intent: topic_trig_unit_circle
+  - action: action_ask_trig_unit_circle
+
+- rule: start trig equations
+  steps:
+  - intent: topic_trig_equations
+  - action: action_ask_trig_equations
+
+- rule: start exponent
+  steps:
+  - intent: topic_exponent
+  - action: action_ask_exponent
+
+- rule: start logarithm
+  steps:
+  - intent: topic_logarithm
+  - action: action_ask_logarithm
+
+- rule: start arithmetic sequence
+  steps:
+  - intent: topic_arithmetic_sequence
+  - action: action_ask_arithmetic_sequence
+
+- rule: start geometric sequence
+  steps:
+  - intent: topic_geometric_sequence
+  - action: action_ask_geometric_sequence
+
+- rule: handle numbers
+  steps:
+  - intent: provide_numbers
+  - action: action_handle_numbers

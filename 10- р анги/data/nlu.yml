@@ -1,0 +1,179 @@
+﻿version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - Сайн байна уу
+    - Сайн уу
+    - Өдрийн мэнд
+    - Сайн уу багшаа
+    - Сайн уу, туслаач
+    - Сайн байна уу, бодлого бодъё
+    - Сайн уу?
+
+- intent: goodbye
+  examples: |
+    - Баяртай
+    - За баяртай
+    - Дараа уулзъя
+    - Баяртай, дараа уулзъя
+    - Би явлаа
+    - Түр баяртай
+
+- intent: affirm
+  examples: |
+    - Тийм
+    - За
+    - Болно
+    - Мэдлээ
+    - Тэгье
+    - Ойлголоо
+
+- intent: deny
+  examples: |
+    - Үгүй
+    - Болохгүй
+    - Үгүй ээ
+    - Үгүй шүү
+    - Хэрэггүй
+
+- intent: ask_topics
+  examples: |
+    - Сэдвүүд юу вэ
+    - Ямар сэдвүүд байна
+    - Сэдвээ жагсаагаарай
+    - Юу үздэг вэ
+    - Хичээлийн сэдэв юу вэ
+
+- intent: ask_help
+  examples: |
+    - Туслаач
+    - Яаж асуух вэ
+    - Заавар өгөөч
+    - Яаж ашиглах вэ
+    - Ямар форматаар оруулах вэ
+
+- intent: topic_function_linear
+  examples: |
+    - Шулуун функц
+    - Шугаман функц
+    - y = ax + b
+    - f(x)=ax+b
+    - шулуун функцийн график
+    - налалттай функц
+
+- intent: topic_function_quadratic
+  examples: |
+    - Квадрат функц
+    - y = ax^2 + bx + c
+    - квадратыг бодъё
+    - парабол
+    - квадрат функцийн график
+    - f(x)=ax^2+bx+c
+
+- intent: topic_function_root
+  examples: |
+    - Язгуур функц
+    - y = sqrt(x)
+    - √ функц
+    - язгуурын график
+    - root function
+
+- intent: topic_function_rational
+  examples: |
+    - Рационал функц
+    - бутархай функц
+    - y = (ax+b)/(cx+d)
+    - рационал функцийн график
+    - хуваагчтай функц
+
+- intent: topic_function_absolute
+  examples: |
+    - Модуль функц
+    - y = |x|
+    - |x-h| функц
+    - abs функц
+    - модультай функц
+
+- intent: topic_function_composition
+  examples: |
+    - Функцийн найрлага
+    - f∘g
+    - найрлага функц
+    - composition
+    - функц нийлүүлэх
+
+- intent: topic_trig_unit_circle
+  examples: |
+    - Тойрог дээрх тригонометр
+    - Нэгж тойрог
+    - sin cos tan утга
+    - тригонометрийн өргөтгөл
+    - unit circle
+
+- intent: topic_trig_equations
+  examples: |
+    - Тригонометрийн гол тэнцэтгэл
+    - тригонометрийн тэнцэтгэл
+    - sinx=a бодлого
+    - cosx=a бодлого
+    - tanx=a бодлого
+
+- intent: topic_exponent
+  examples: |
+    - Экспонент
+    - Экспоненциал
+    - a^x
+    - илтгэгч функц
+    - экспонент бодлого
+
+- intent: topic_logarithm
+  examples: |
+    - Логарифм
+    - log_a b
+    - логарифмын суурь
+    - лог функц
+    - лог бодлого
+
+- intent: topic_arithmetic_sequence
+  examples: |
+    - Арифметик дараалал
+    - арифметик прогресс
+    - дарааллын ялгавар
+    - a1 d n
+    - арифметик гишүүн
+
+- intent: topic_geometric_sequence
+  examples: |
+    - Геометр дараалал
+    - геометр прогресс
+    - геометрийн илтгэгч
+    - q өсөлт
+    - геометрийн гишүүн
+
+- intent: provide_numbers
+  examples: |
+    - 2 -3 4
+    - a=2 b=-3 x=4
+    - 1 5 -6 2
+    - a=1 b=5 c=-6 x=2
+    - 2 1 -3 5
+    - a=2 h=1 k=-3 x=5
+    - 1 2 3 -4 1
+    - a=1 b=2 c=3 d=-4 x=1
+    - 2 1 -3 4
+    - 30°
+    - 45 deg
+    - 1.5708 rad
+    - pi/6
+    - sin x = 1/2
+    - cos x = -0.5
+    - tan x = 1
+    - 2 3
+    - a=2 x=5
+    - 2 8
+    - a=2 b=8
+    - a1=3 d=2 n=10
+    - 3 2 10
+    - a1=2 q=3 n=5
+    - 2 3 5

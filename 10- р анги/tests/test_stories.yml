@@ -1,0 +1,36 @@
+﻿#### This file contains tests to evaluate that your bot behaves as expected.
+#### If you want to learn more, please see the docs: https://rasa.com/docs/rasa/testing-your-assistant
+
+stories:
+- story: quadratic function flow
+  steps:
+  - user: |
+      Квадрат функц
+    intent: topic_function_quadratic
+  - action: action_ask_function_quadratic
+  - user: |
+      1 -2 -3 4
+    intent: provide_numbers
+  - action: action_handle_numbers
+
+- story: trig equation flow
+  steps:
+  - user: |
+      Тригонометрийн гол тэнцэтгэл
+    intent: topic_trig_equations
+  - action: action_ask_trig_equations
+  - user: |
+      sin x = 1/2
+    intent: provide_numbers
+  - action: action_handle_numbers
+
+- story: geometric sequence flow
+  steps:
+  - user: |
+      Геометр дараалал
+    intent: topic_geometric_sequence
+  - action: action_ask_geometric_sequence
+  - user: |
+      2 3 5
+    intent: provide_numbers
+  - action: action_handle_numbers

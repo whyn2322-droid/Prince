@@ -1,0 +1,150 @@
+﻿version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - ask_topics
+  - ask_help
+  - topic_function_linear
+  - topic_function_quadratic
+  - topic_function_root
+  - topic_function_rational
+  - topic_function_absolute
+  - topic_function_composition
+  - topic_trig_unit_circle
+  - topic_trig_equations
+  - topic_exponent
+  - topic_logarithm
+  - topic_arithmetic_sequence
+  - topic_geometric_sequence
+  - provide_numbers
+
+slots:
+  pending_calc:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+responses:
+  utter_greet:
+    - text: "Сайн байна уу! 10-р ангийн математик (функц, тригонометр, лог/эксп, дараалал) бодлогоор тусалъя. Ямар сэдэв сонирхож байна?"
+
+  utter_goodbye:
+    - text: "Баяртай!"
+
+  utter_help:
+    - text: "Сэдвээ нэрлээд өгөгдлөө оруулна. Жишээ: 'квадрат функц' → a b c x, 'тригонометрийн тэнцэтгэл' → sin x = 1/2, 'арифметик дараалал' → a1 d n, 'тригонометр тойрог' → 30° эсвэл pi/6."
+
+  utter_topics:
+    - text: |
+        Сэдвүүд:
+        1) Шулуун функц (y=ax+b)
+        2) Квадрат функц (y=ax^2+bx+c)
+        3) Язгуур функц (y=a*sqrt(x-h)+k)
+        4) Рационал функц (y=(ax+b)/(cx+d))
+        5) Модуль функц (y=a*|x-h|+k)
+        6) Функцийн найрлага (f∘g)
+        7) Тригонометр – нэгж тойрог (sin, cos, tan)
+        8) Тригонометрийн гол тэнцэтгэл
+        9) Экспонент (a^x)
+        10) Логарифм (log_a b)
+        11) Арифметик дараалал
+        12) Геометр дараалал
+        Ямар сэдвээс эхлэх вэ?
+
+  utter_function_linear_intro:
+    - text: "Шулуун функц: f(x)=ax+b. Налалт a, огтлол b."
+
+  utter_ask_function_linear:
+    - text: "a, b, x утгыг оруул (жишээ: 2 -3 4)."
+
+  utter_function_quadratic_intro:
+    - text: "Квадрат функц: f(x)=ax^2+bx+c (a≠0). Оргил ба үндсийг тооцоолж болно."
+
+  utter_ask_function_quadratic:
+    - text: "a, b, c, x утгыг оруул (жишээ: 1 -2 -3 4)."
+
+  utter_function_root_intro:
+    - text: "Язгуур функц: f(x)=a*sqrt(x-h)+k, домайн x>=h."
+
+  utter_ask_function_root:
+    - text: "a, h, k, x утгыг оруул (жишээ: 2 1 -3 5)."
+
+  utter_function_rational_intro:
+    - text: "Рационал функц: f(x)=(ax+b)/(cx+d), домайн cx+d≠0."
+
+  utter_ask_function_rational:
+    - text: "a, b, c, d, x утгыг оруул (жишээ: 1 2 3 -4 1)."
+
+  utter_function_absolute_intro:
+    - text: "Модуль функц: f(x)=a*|x-h|+k."
+
+  utter_ask_function_absolute:
+    - text: "a, h, k, x утгыг оруул (жишээ: 2 1 -3 5)."
+
+  utter_function_composition_intro:
+    - text: "Функцийн найрлага: f(x)=ax+b, g(x)=cx+d. (f∘g)(x), (g∘f)(x)-ийг олъё."
+
+  utter_ask_function_composition:
+    - text: "a, b, c, d утгыг оруул (жишээ: 2 1 -3 4)."
+
+  utter_trig_unit_circle_intro:
+    - text: "Нэгж тойрог дээрх өнцөгт sin, cos, tan-ыг олъё."
+
+  utter_ask_trig_unit_circle:
+    - text: "Өнцөг оруул (жишээ: 30°, 45 deg, pi/6)."
+
+  utter_trig_equations_intro:
+    - text: "Тригонометрийн гол тэнцэтгэл: sinx=a, cosx=a, tanx=a."
+
+  utter_ask_trig_equations:
+    - text: "Тэнцэтгэлээ бич (жишээ: sin x = 1/2)."
+
+  utter_exponent_intro:
+    - text: "Экспонент: a^x (a>0, a≠1)."
+
+  utter_ask_exponent:
+    - text: "a ба x утгыг оруул (жишээ: 2 3)."
+
+  utter_logarithm_intro:
+    - text: "Логарифм: log_a b (a>0, a≠1, b>0)."
+
+  utter_ask_logarithm:
+    - text: "a ба b утгыг оруул (жишээ: 2 8)."
+
+  utter_arithmetic_sequence_intro:
+    - text: "Арифметик дараалал: a_n = a1 + (n-1)d, S_n = n/2(2a1+(n-1)d)."
+
+  utter_ask_arithmetic_sequence:
+    - text: "a1, d, n утгыг оруул (жишээ: 3 2 10)."
+
+  utter_geometric_sequence_intro:
+    - text: "Геометр дараалал: a_n=a1*q^(n-1), S_n = a1*(q^n-1)/(q-1) (q≠1)."
+
+  utter_ask_geometric_sequence:
+    - text: "a1, q, n утгыг оруул (жишээ: 2 3 5)."
+
+  utter_need_topic:
+    - text: "Сэдвээ сонгоно уу (жишээ: 'квадрат функц', 'тригонометрийн тэнцэтгэл')."
+
+actions:
+  - action_ask_function_linear
+  - action_ask_function_quadratic
+  - action_ask_function_root
+  - action_ask_function_rational
+  - action_ask_function_absolute
+  - action_ask_function_composition
+  - action_ask_trig_unit_circle
+  - action_ask_trig_equations
+  - action_ask_exponent
+  - action_ask_logarithm
+  - action_ask_arithmetic_sequence
+  - action_ask_geometric_sequence
+  - action_handle_numbers
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

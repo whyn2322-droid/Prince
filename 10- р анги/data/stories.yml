@@ -1,0 +1,38 @@
+﻿version: "3.1"
+
+stories:
+
+- story: quadratic function practice
+  steps:
+  - intent: topic_function_quadratic
+  - action: action_ask_function_quadratic
+  - intent: provide_numbers
+  - action: action_handle_numbers
+
+- story: trig unit circle practice
+  steps:
+  - intent: topic_trig_unit_circle
+  - action: action_ask_trig_unit_circle
+  - intent: provide_numbers
+  - action: action_handle_numbers
+
+- story: trig equation practice
+  steps:
+  - intent: topic_trig_equations
+  - action: action_ask_trig_equations
+  - intent: provide_numbers
+  - action: action_handle_numbers
+
+- story: logarithm practice
+  steps:
+  - intent: topic_logarithm
+  - action: action_ask_logarithm
+  - intent: provide_numbers
+  - action: action_handle_numbers
+
+- story: arithmetic sequence practice
+  steps:
+  - intent: topic_arithmetic_sequence
+  - action: action_ask_arithmetic_sequence
+  - intent: provide_numbers
+  - action: action_handle_numbers
