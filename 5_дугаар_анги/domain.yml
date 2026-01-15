@@ -1,0 +1,461 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - ask_area
+  - ask_math
+  - choose_shape
+  - choose_math_task
+  - choose_speed_target
+  - inform
+  - restart_area
+
+entities:
+  - shape
+  - math_task
+  - speed_target
+
+slots:
+  shape:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: shape
+        conditions:
+          - active_loop: area_form
+      - type: from_text
+        intent: choose_shape
+        conditions:
+          - active_loop: area_form
+            requested_slot: shape
+
+  length:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: area_form
+            requested_slot: length
+
+  width:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: area_form
+            requested_slot: width
+
+  radius:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: area_form
+            requested_slot: radius
+
+  base:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: area_form
+            requested_slot: base
+
+  height:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: area_form
+            requested_slot: height
+
+  b1:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: area_form
+            requested_slot: b1
+
+  b2:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: area_form
+            requested_slot: b2
+
+  math_task:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: math_task
+        conditions:
+          - active_loop: math_form
+      - type: from_text
+        intent: choose_math_task
+        conditions:
+          - active_loop: math_form
+            requested_slot: math_task
+
+  speed_target:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: speed_target
+        conditions:
+          - active_loop: math_form
+            requested_slot: speed_target
+      - type: from_text
+        intent: choose_speed_target
+        conditions:
+          - active_loop: math_form
+            requested_slot: speed_target
+
+  percent_part:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: percent_part
+
+  percent_total:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: percent_total
+
+  ratio_a:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: ratio_a
+
+  ratio_b:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: ratio_b
+
+  prop_a:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: prop_a
+
+  prop_b:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: prop_b
+
+  prop_c:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: prop_c
+
+  speed_value:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: speed_value
+
+  distance_value:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: distance_value
+
+  time_value:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: time_value
+
+  coord_x:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: coord_x
+
+  coord_y:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: coord_y
+
+  comp_len1:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: comp_len1
+
+  comp_w1:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: comp_w1
+
+  comp_len2:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: comp_len2
+
+  comp_w2:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: comp_w2
+
+  para_base:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: para_base
+
+  para_height:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        intent: inform
+        conditions:
+          - active_loop: math_form
+            requested_slot: para_height
+
+responses:
+  utter_greet:
+    - text: "Сайн уу 👋 'дүрсний талбай ол' гэж бичээд эхлүүлээрэй."
+
+  utter_goodbye:
+    - text: "Баяртай 👋"
+
+  utter_how_to_start:
+    - text: "Эхлүүлэхийн тулд: 'дүрсний талбай ол' гэж бичээрэй."
+
+  utter_ask_shape:
+    - text: "Ямар дүрсний талбай олох вэ?"
+      buttons:
+        - title: "Тэгш өнцөгт"
+          payload: '/choose_shape{{"shape":"rectangle"}}'
+        - title: "Тойрог"
+          payload: '/choose_shape{{"shape":"circle"}}'
+        - title: "Гурвалжин"
+          payload: '/choose_shape{{"shape":"triangle"}}'
+        - title: "Трапец"
+          payload: '/choose_shape{{"shape":"trapezoid"}}'
+        - title: "Параллелограмм"
+          payload: '/choose_shape{{"shape":"parallelogram"}}'
+
+
+  utter_ask_length:
+    - text: "Урт хэд вэ? (ж: 5)"
+  utter_ask_width:
+    - text: "Өргөн хэд вэ? (ж: 3)"
+  utter_ask_radius:
+    - text: "Радиус хэд вэ? (ж: 5)"
+  utter_ask_base:
+    - text: "Суурь хэд вэ? (ж: 6)"
+  utter_ask_height:
+    - text: "Өндөр хэд вэ? (ж: 4)"
+  utter_ask_b1:
+    - text: "Трапецын суурь1 хэд вэ? (ж: 6)"
+  utter_ask_b2:
+    - text: "Трапецын суурь2 хэд вэ? (ж: 10)"
+
+  utter_ask_math_task:
+    - text: "Ямар бодлого бодох вэ?"
+      buttons:
+        - title: "Хувь (%)"
+          payload: '/choose_math_task{{"math_task":"percent"}}'
+        - title: "Харьцаа"
+          payload: '/choose_math_task{{"math_task":"ratio"}}'
+        - title: "Пропорц"
+          payload: '/choose_math_task{{"math_task":"proportion"}}'
+        - title: "Хурд-зам-хугацаа"
+          payload: '/choose_math_task{{"math_task":"speed"}}'
+        - title: "Координат"
+          payload: '/choose_math_task{{"math_task":"coordinate"}}'
+        - title: "Нийлмэл талбай"
+          payload: '/choose_math_task{{"math_task":"composite_area"}}'
+        - title: "Параллелограмм"
+          payload: '/choose_math_task{{"math_task":"parallelogram"}}'
+
+  utter_ask_percent_part:
+    - text: "Хэсэг хэд вэ? (ж: 20)"
+  utter_ask_percent_total:
+    - text: "Нийт хэд вэ? (ж: 80)"
+  utter_ask_ratio_a:
+    - text: "Харьцааны эхний тоо хэд вэ? (ж: 3)"
+  utter_ask_ratio_b:
+    - text: "Харьцааны хоёр дахь тоо хэд вэ? (ж: 5)"
+  utter_ask_prop_a:
+    - text: "Пропорцын a хэд вэ? (a:b = c:x) (ж: 2)"
+  utter_ask_prop_b:
+    - text: "Пропорцын b хэд вэ? (ж: 3)"
+  utter_ask_prop_c:
+    - text: "Пропорцын c хэд вэ? (ж: 4)"
+  utter_ask_speed_target:
+    - text: "Юуг олох вэ?"
+      buttons:
+        - title: "Хурд (v)"
+          payload: '/choose_speed_target{{"speed_target":"speed"}}'
+        - title: "Зам (s)"
+          payload: '/choose_speed_target{{"speed_target":"distance"}}'
+        - title: "Хугацаа (t)"
+          payload: '/choose_speed_target{{"speed_target":"time"}}'
+  utter_ask_speed_value:
+    - text: "Хурд хэд вэ? (ж: 60)"
+  utter_ask_distance_value:
+    - text: "Зам хэд вэ? (ж: 120)"
+  utter_ask_time_value:
+    - text: "Хугацаа хэд вэ? (ж: 2)"
+  utter_ask_coord_x:
+    - text: "x хэд вэ? (ж: -2)"
+  utter_ask_coord_y:
+    - text: "y хэд вэ? (ж: 3)"
+  utter_ask_comp_len1:
+    - text: "1-р тэгш өнцөгтийн урт хэд вэ? (ж: 5)"
+  utter_ask_comp_w1:
+    - text: "1-р тэгш өнцөгтийн өргөн хэд вэ? (ж: 3)"
+  utter_ask_comp_len2:
+    - text: "2-р тэгш өнцөгтийн урт хэд вэ? (ж: 4)"
+  utter_ask_comp_w2:
+    - text: "2-р тэгш өнцөгтийн өргөн хэд вэ? (ж: 2)"
+  utter_ask_para_base:
+    - text: "Параллелограммын суурь хэд вэ? (ж: 6)"
+  utter_ask_para_height:
+    - text: "Параллелограммын өндөр хэд вэ? (ж: 4)"
+
+forms:
+  area_form:
+    required_slots:
+      - shape
+      - length
+      - width
+      - radius
+      - base
+      - height
+      - b1
+      - b2
+  math_form:
+    required_slots:
+      - math_task
+      - percent_part
+      - percent_total
+      - ratio_a
+      - ratio_b
+      - prop_a
+      - prop_b
+      - prop_c
+      - speed_target
+      - speed_value
+      - distance_value
+      - time_value
+      - coord_x
+      - coord_y
+      - comp_len1
+      - comp_w1
+      - comp_len2
+      - comp_w2
+      - para_base
+      - para_height
+
+actions:
+  - validate_area_form
+  - validate_math_form
+  - action_calculate_area
+  - action_calculate_math
+  - action_reset_area
+  - action_reset_math
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

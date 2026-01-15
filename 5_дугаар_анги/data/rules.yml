@@ -1,0 +1,87 @@
+version: "3.1"
+
+rules:
+- rule: greet only when no form
+  condition:
+    - active_loop: null
+  steps:
+    - intent: greet
+    - action: utter_greet
+
+- rule: say goodbye
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: start form
+  steps:
+    - intent: ask_area
+    - action: area_form
+    - active_loop: area_form
+
+- rule: start math form
+  steps:
+    - intent: ask_math
+    - action: math_form
+    - active_loop: math_form
+
+# ✅ shape-аа шууд бичсэн ч form эхлүүлнэ
+- rule: choose shape starts form
+  steps:
+    - intent: choose_shape
+    - action: area_form
+    - active_loop: area_form
+
+- rule: choose math task starts form
+  steps:
+    - intent: choose_math_task
+    - action: math_form
+    - active_loop: math_form
+
+- rule: fill numbers while form
+  condition:
+    - active_loop: area_form
+  steps:
+    - intent: inform
+    - action: area_form
+    - active_loop: area_form
+
+- rule: fill numbers while math form
+  condition:
+    - active_loop: math_form
+  steps:
+    - intent: inform
+    - action: math_form
+    - active_loop: math_form
+
+- rule: fill math target while math form
+  condition:
+    - active_loop: math_form
+  steps:
+    - intent: choose_speed_target
+    - action: math_form
+    - active_loop: math_form
+
+- rule: submit form
+  condition:
+    - active_loop: area_form
+  steps:
+    - action: area_form
+    - active_loop: null
+    - action: action_calculate_area
+    - action: action_reset_area
+
+- rule: submit math form
+  condition:
+    - active_loop: math_form
+  steps:
+    - action: math_form
+    - active_loop: null
+    - action: action_calculate_math
+    - action: action_reset_math
+
+- rule: restart area
+  steps:
+    - intent: restart_area
+    - action: action_reset_area
+    - action: utter_how_to_start

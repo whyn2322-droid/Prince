@@ -1,0 +1,101 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - сайн уу
+    - сайн байна уу
+    - hello
+    - hi
+
+- intent: goodbye
+  examples: |
+    - баяртай
+    - bye
+
+- intent: ask_area
+  examples: |
+    - дүрсний талбай ол
+    - талбай бод
+    - талбай ол
+
+- intent: ask_math
+  examples: |
+    - математикийн бодлого бодъё
+    - бодлого бодъё
+    - хувь харьцаа пропорц бодъё
+    - хурд зам хугацаа бодлого
+
+- intent: restart_area
+  examples: |
+    - дахин эхэлье
+    - шинээр эхэлье
+    - эхнээс нь
+    - дахин эхлэх
+    - restart
+    - дахин эхлүүл
+
+# ✅ ЭНЭ ХЭСЭГ ЧУХАЛ: "трапец" ганцаараа ирэхэд choose_shape гэж 100% дөхнө
+- intent: choose_shape
+  examples: |
+    - [дөрвөлжин]{"entity":"shape","value":"rectangle"}
+    - [тэгш өнцөгт]{"entity":"shape","value":"rectangle"}
+    - [тойрог]{"entity":"shape","value":"circle"}
+    - [гурвалжин]{"entity":"shape","value":"triangle"}
+    - [трапец]{"entity":"shape","value":"trapezoid"}
+    - [параллелограмм]{"entity":"shape","value":"parallelogram"}
+    - би [трапец]{"entity":"shape","value":"trapezoid"} сонгоё
+    - [гурвалжин]{"entity":"shape","value":"triangle"}-ы талбай
+    - [параллелограмм]{"entity":"shape","value":"parallelogram"} сонгох
+    - [тойрог]{"entity":"shape","value":"circle"} сонгоё
+    - [дөрвөлжин]{"entity":"shape","value":"rectangle"} талбай
+
+- intent: choose_math_task
+  examples: |
+    - [хувь]{"entity":"math_task","value":"percent"}
+    - [харьцаа]{"entity":"math_task","value":"ratio"}
+    - [пропорц]{"entity":"math_task","value":"proportion"}
+    - [хурд]{"entity":"math_task","value":"speed"}
+    - [хурд-зам-хугацаа]{"entity":"math_task","value":"speed"}
+    - [координат]{"entity":"math_task","value":"coordinate"}
+    - [координатын хавтгай]{"entity":"math_task","value":"coordinate"}
+    - [нийлмэл талбай]{"entity":"math_task","value":"composite_area"}
+    - [нийлмэл дүрс]{"entity":"math_task","value":"composite_area"}
+    - [параллелограмм]{"entity":"math_task","value":"parallelogram"}
+
+- intent: choose_speed_target
+  examples: |
+    - [хурд]{"entity":"speed_target","value":"speed"}
+    - [зам]{"entity":"speed_target","value":"distance"}
+    - [хугацаа]{"entity":"speed_target","value":"time"}
+    - [v]{"entity":"speed_target","value":"speed"}
+    - [s]{"entity":"speed_target","value":"distance"}
+    - [t]{"entity":"speed_target","value":"time"}
+- intent: inform
+  examples: |
+    - 5
+    - 3
+    - 10
+    - 4.5
+    - 6,2
+
+- synonym: rectangle
+  examples: |
+    - дөрвөлжин
+    - тэгш өнцөгт
+
+- synonym: circle
+  examples: |
+    - тойрог
+
+- synonym: triangle
+  examples: |
+    - гурвалжин
+
+- synonym: trapezoid
+  examples: |
+    - трапец
+
+- synonym: parallelogram
+  examples: |
+    - параллелограмм
