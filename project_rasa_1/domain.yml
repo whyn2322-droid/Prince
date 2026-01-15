@@ -1,0 +1,134 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - request_perimeter
+  - inform
+  - affirm
+  - deny
+  - out_of_scope
+
+entities:
+  - shape
+
+slots:
+  shape:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: shape
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: shape
+        not_intent: greet
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: shape
+        not_intent: greet
+  radius:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: radius
+  width:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: width
+  height:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: height
+  square_side:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: square_side
+  side_a:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: side_a
+  side_b:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: side_b
+  side_c:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: perimeter_form
+            requested_slot: side_c
+
+forms:
+  perimeter_form:
+    required_slots:
+      - shape
+      - radius
+      - width
+      - height
+      - square_side
+      - side_a
+      - side_b
+      - side_c
+
+responses:
+  utter_greet:
+    - text: "Сайн уу! Би дүрсийн хүрээний уртыг бодож өгнө."
+  utter_goodbye:
+    - text: "Баяртай! Хэрэгтэй бол дахин асуугаарай."
+  utter_ask_shape:
+    - text: "Ямар дүрсний хүрээг бодох вэ? (тойрог, тэгш өнцөгт, дөрвөлжин, гурвалжин)"
+  utter_ask_radius:
+    - text: "Радиус хэд вэ?"
+  utter_ask_width:
+    - text: "Урт хэд вэ?"
+  utter_ask_height:
+    - text: "Өргөн хэд вэ?"
+  utter_ask_square_side:
+    - text: "Дөрвөлжний тал хэд вэ?"
+  utter_ask_side_a:
+    - text: "Гурвалжны a талын урт хэд вэ?"
+  utter_ask_side_b:
+    - text: "Гурвалжны b талын урт хэд вэ?"
+  utter_ask_side_c:
+    - text: "Гурвалжны c талын урт хэд вэ?"
+  utter_invalid_shape:
+    - text: "Дүрсийг зөв оруулна уу. (тойрог, тэгш өнцөгт, дөрвөлжин, гурвалжин)"
+  utter_invalid_number:
+    - text: "Эерэг тоо оруулна уу."
+  utter_out_of_scope:
+    - text: "Уучлаарай, би зөвхөн дүрсийн хүрээний уртыг бодож өгнө."
+
+actions:
+  - action_calculate_perimeter
+  - validate_perimeter_form
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: false
