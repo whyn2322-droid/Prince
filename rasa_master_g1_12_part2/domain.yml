@@ -1,0 +1,454 @@
+version: '3.1'
+intents:
+- greet
+- goodbye
+- request_perimeter
+- inform
+- affirm
+- deny
+- out_of_scope
+- mood_great
+- mood_unhappy
+- bot_challenge
+- calc_square_area
+- calc_rectangle_area
+- calc_cube_volume
+- calc_sphere_volume
+- calc_cone_volume
+- calc_cylinder_volume
+- inform_measurements
+- ask_capabilities
+- ask_quadratic_definition
+- ask_quadratic_discriminant
+- ask_quadratic_formula
+- solve_quadratic
+- ask_factoring
+- ask_similarity_scale
+- ask_probability_basic
+- ask_statistics_basic
+- ask_trigonometry_basic
+- ask_square_basics
+- ask_cone
+- ask_sphere
+- nlu_fallback
+- ask_math
+- choose_topic
+- choose_identity_type
+- restart_math
+entities:
+- shape
+- topic
+- identity_type
+actions:
+- action_calculate_perimeter
+- validate_perimeter_form
+- action_ask_square_side
+- action_ask_rectangle_sides
+- action_ask_cube_side
+- action_ask_sphere_radius
+- action_ask_cone_params
+- action_ask_cylinder_params
+- action_handle_measurements
+- action_solve_quadratic
+- action_discriminant
+- action_factor_or_expand
+- action_similarity_scale
+- action_probability
+- action_statistics
+- action_trigonometry
+- action_square_roots
+- action_cone
+- action_sphere
+- validate_math8_form
+- action_calculate_math8
+- action_reset_math8
+slots:
+  shape:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: shape
+      conditions:
+      - active_loop: perimeter_form
+        requested_slot: shape
+      not_intent: greet
+    - type: from_text
+      conditions:
+      - active_loop: perimeter_form
+        requested_slot: shape
+      not_intent: greet
+  radius:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: perimeter_form
+        requested_slot: radius
+  width:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: perimeter_form
+        requested_slot: width
+  height:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: perimeter_form
+        requested_slot: height
+  square_side:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: perimeter_form
+        requested_slot: square_side
+  side_a:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: perimeter_form
+        requested_slot: side_a
+  side_b:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: perimeter_form
+        requested_slot: side_b
+  side_c:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: perimeter_form
+        requested_slot: side_c
+  pending_calc:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: custom
+  topic:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: topic
+      conditions:
+      - active_loop: math8_form
+        requested_slot: topic
+    - type: from_text
+      intent: choose_topic
+      conditions:
+      - active_loop: math8_form
+        requested_slot: topic
+  identity_type:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: identity_type
+      conditions:
+      - active_loop: math8_form
+        requested_slot: identity_type
+    - type: from_text
+      intent: choose_identity_type
+      conditions:
+      - active_loop: math8_form
+        requested_slot: identity_type
+  id_a:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: id_a
+  id_b:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: id_b
+  quad_a:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: quad_a
+  quad_b:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: quad_b
+  quad_c:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: quad_c
+  sys_a1:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: sys_a1
+  sys_b1:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: sys_b1
+  sys_c1:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: sys_c1
+  sys_a2:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: sys_a2
+  sys_b2:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: sys_b2
+  sys_c2:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: sys_c2
+  circle_r:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: circle_r
+  trig_opp:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: trig_opp
+  trig_adj:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: trig_adj
+  trig_hyp:
+    type: float
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: inform
+      conditions:
+      - active_loop: math8_form
+        requested_slot: trig_hyp
+responses:
+  utter_greet:
+  - text: Сайн уу! Би дүрсийн хүрээний уртыг бодож өгнө.
+  - text: Сайн уу! Яааж байна?
+  - text: Сайн уу! Би математикийн туслах бот. Ямар сэдвээр туслах вэ?
+  - text: Сайн уу! 8-р ангийн бодлого бодъё. '8-р анги бодлого бод' гэж бичээд эхлүүлээрэй.
+  utter_goodbye:
+  - text: Баяртай! Хэрэгтэй бол дахин асуугаарай.
+  - text: Баяртай!
+  utter_ask_shape:
+  - text: Ямар дүрсний хүрээг бодох вэ? (тойрог, тэгш өнцөгт, дөрвөлжин, гурвалжин)
+  utter_ask_radius:
+  - text: Радиус хэд вэ?
+  utter_ask_width:
+  - text: Урт хэд вэ?
+  utter_ask_height:
+  - text: Өргөн хэд вэ?
+  utter_ask_square_side:
+  - text: Дөрвөлжний тал хэд вэ?
+  - text: 'Квадратин талын уртыг өгнө үү (жишээ: a=5 эсвэл 5).'
+  utter_ask_side_a:
+  - text: Гурвалжны a талын урт хэд вэ?
+  utter_ask_side_b:
+  - text: Гурвалжны b талын урт хэд вэ?
+  utter_ask_side_c:
+  - text: Гурвалжны c талын урт хэд вэ?
+  utter_invalid_shape:
+  - text: Дүрсийг зөв оруулна уу. (тойрог, тэгш өнцөгт, дөрвөлжин, гурвалжин)
+  utter_invalid_number:
+  - text: Эерэг тоо оруулна уу.
+  utter_out_of_scope:
+  - text: Уучлаарай, би зөвхөн дүрсийн хүрээний уртыг бодож өгнө.
+  - text: Уучлаарай, энэ асуултад тусалж чадахгүй байна. Математикийн дээрх сэдвүүдээр
+      асуугаарай.
+  utter_cheer_up:
+  - text: 'Сэтгэл сэргээх нэг зүйл:'
+    image: https://i.imgur.com/nGF1K8f.jpg
+  utter_did_that_help:
+  - text: Тус болсон уу?
+  utter_happy:
+  - text: Гайхалтай, үргэлжлүүлээрэй!
+  utter_iamabot:
+  - text: Би Rasa дээр ажилладаг бот.
+  utter_ask_rectangle_sides:
+  - text: 'Тэгш өнцөгтийн урт ба өргөнийг өгнө үү (жишээ: 5 3).'
+  utter_ask_cube_side:
+  - text: 'Кубын талын уртыг өгнө үү (жишээ: a=5 эсвэл 5).'
+  utter_ask_sphere_radius:
+  - text: 'Бөмбөрцгийн радиусыг өгнө үү (жишээ: r=3 эсвэл 3).'
+  utter_ask_cone_params:
+  - text: 'Конусын радиус ба өндрийг өгнө үү (жишээ: r=3 h=5).'
+  utter_ask_cylinder_params:
+  - text: 'Цилиндрийн радиус ба өндрийг өгнө үү (жишээ: r=3 h=5).'
+  utter_ask_calc_type:
+  - text: Ямар тооцоолол хийх вэ? Квадрат, тэгш өнцөгт, куб, бөмбөрцөг, конус, цилиндр.
+  utter_capabilities:
+  - text: Квадрат тэгшитгэл бодох (a,b,c), дискриминант, факторчлал/дэлгэх, төсөө
+      ба масштаб, магадлал/статистикийн бодлого, тригонометрийн үндэс, квадрат язгуур,
+      конус ба бөмбөрцгийн бодлогуудыг бодно.
+  utter_quadratic_definition:
+  - text: 'Квадрат тэгшитгэл: ax^2 + bx + c = 0 (a != 0). a, b, c нь коэффициентүүд.'
+  utter_quadratic_formula:
+  - text: 'Квадрат тэгшитгэлийн шийд: x = (-b +/- sqrt(D)) / (2a), энд D = b^2 - 4ac.'
+  utter_how_to_start:
+  - text: 'Жишээ: ''8-р анги бодлого бод'' гэж бичээрэй.'
+  utter_ask_topic:
+  - text: Аль сэдвээр бодох вэ?
+    buttons:
+    - title: Квадрат илэрхийлэл
+      payload: /choose_topic{{"topic":"identity"}}
+    - title: Квадрат тэгшитгэл
+      payload: /choose_topic{{"topic":"quadratic"}}
+    - title: Систем (2 хувьсагч)
+      payload: /choose_topic{{"topic":"system"}}
+    - title: Тойрог
+      payload: /choose_topic{{"topic":"circle"}}
+    - title: Тригонометр
+      payload: /choose_topic{{"topic":"trig"}}
+  utter_ask_identity_type:
+  - text: Ямар томьёо сонгох вэ?
+    buttons:
+    - title: (a+b)^2
+      payload: /choose_identity_type{{"identity_type":"square_sum"}}
+    - title: (a-b)^2
+      payload: /choose_identity_type{{"identity_type":"square_diff"}}
+    - title: a^2-b^2
+      payload: /choose_identity_type{{"identity_type":"diff_squares"}}
+  utter_ask_id_a:
+  - text: a хэд вэ?
+  utter_ask_id_b:
+  - text: b хэд вэ?
+  utter_ask_quad_a:
+  - text: a хэд вэ? (ax^2 + bx + c = 0)
+  utter_ask_quad_b:
+  - text: b хэд вэ?
+  utter_ask_quad_c:
+  - text: c хэд вэ?
+  utter_ask_sys_a1:
+  - text: 1-р тэгшитгэлийн a1 хэд вэ? (a1*x + b1*y = c1)
+  utter_ask_sys_b1:
+  - text: 1-р тэгшитгэлийн b1 хэд вэ?
+  utter_ask_sys_c1:
+  - text: 1-р тэгшитгэлийн c1 хэд вэ?
+  utter_ask_sys_a2:
+  - text: 2-р тэгшитгэлийн a2 хэд вэ? (a2*x + b2*y = c2)
+  utter_ask_sys_b2:
+  - text: 2-р тэгшитгэлийн b2 хэд вэ?
+  utter_ask_sys_c2:
+  - text: 2-р тэгшитгэлийн c2 хэд вэ?
+  utter_ask_circle_r:
+  - text: Тойргийн r хэд вэ?
+  utter_ask_trig_opp:
+  - text: Эсрэг тал (opposite) хэд вэ?
+  utter_ask_trig_adj:
+  - text: Хөрш тал (adjacent) хэд вэ?
+  utter_ask_trig_hyp:
+  - text: Гипотенуз (hypotenuse) хэд вэ?
+forms:
+  perimeter_form:
+    required_slots:
+    - shape
+    - radius
+    - width
+    - height
+    - square_side
+    - side_a
+    - side_b
+    - side_c
+  math8_form:
+    required_slots:
+    - topic
+    - identity_type
+    - id_a
+    - id_b
+    - quad_a
+    - quad_b
+    - quad_c
+    - sys_a1
+    - sys_b1
+    - sys_c1
+    - sys_a2
+    - sys_b2
+    - sys_c2
+    - circle_r
+    - trig_opp
+    - trig_adj
+    - trig_hyp
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: false

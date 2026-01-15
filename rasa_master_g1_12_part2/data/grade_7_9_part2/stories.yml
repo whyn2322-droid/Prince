@@ -1,0 +1,8 @@
+version: "3.1"
+
+stories:
+- story: start math8
+  steps:
+    - intent: ask_math
+    - action: math8_form
+    - active_loop: math8_form

@@ -1,0 +1,33 @@
+version: "3.1"
+
+rules:
+  - rule: Greet and ask shape
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - action: perimeter_form
+      - active_loop: perimeter_form
+
+  - rule: Goodbye
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye
+
+  - rule: Activate perimeter form
+    steps:
+      - intent: request_perimeter
+      - action: perimeter_form
+      - active_loop: perimeter_form
+
+  - rule: Submit perimeter form
+    condition:
+      - active_loop: perimeter_form
+    steps:
+      - action: perimeter_form
+      - active_loop: null
+      - action: action_calculate_perimeter
+
+  - rule: Out of scope
+    steps:
+      - intent: out_of_scope
+      - action: utter_out_of_scope

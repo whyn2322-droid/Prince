@@ -1,0 +1,50 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - ask_capabilities
+  - ask_quadratic_definition
+  - ask_quadratic_discriminant
+  - ask_quadratic_formula
+  - solve_quadratic
+  - ask_factoring
+  - ask_similarity_scale
+  - ask_probability_basic
+  - ask_statistics_basic
+  - ask_trigonometry_basic
+  - ask_square_basics
+  - ask_cone
+  - ask_sphere
+  - out_of_scope
+  - nlu_fallback
+
+responses:
+  utter_greet:
+    - text: "Сайн уу! Би математикийн туслах бот. Ямар сэдвээр туслах вэ?"
+  utter_goodbye:
+    - text: "Баяртай!"
+  utter_capabilities:
+    - text: "Квадрат тэгшитгэл бодох (a,b,c), дискриминант, факторчлал/дэлгэх, төсөө ба масштаб, магадлал/статистикийн бодлого, тригонометрийн үндэс, квадрат язгуур, конус ба бөмбөрцгийн бодлогуудыг бодно."
+  utter_quadratic_definition:
+    - text: "Квадрат тэгшитгэл: ax^2 + bx + c = 0 (a != 0). a, b, c нь коэффициентүүд."
+  utter_quadratic_formula:
+    - text: "Квадрат тэгшитгэлийн шийд: x = (-b +/- sqrt(D)) / (2a), энд D = b^2 - 4ac."
+  utter_out_of_scope:
+    - text: "Уучлаарай, энэ асуултад тусалж чадахгүй байна. Математикийн дээрх сэдвүүдээр асуугаарай."
+
+actions:
+  - action_solve_quadratic
+  - action_discriminant
+  - action_factor_or_expand
+  - action_similarity_scale
+  - action_probability
+  - action_statistics
+  - action_trigonometry
+  - action_square_roots
+  - action_cone
+  - action_sphere
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: false

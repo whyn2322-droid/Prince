@@ -1,0 +1,48 @@
+version: "3.1"
+
+rules:
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: ask square side when user wants square area
+  steps:
+  - intent: calc_square_area
+  - action: action_ask_square_side
+
+- rule: ask rectangle sides when user wants rectangle area
+  steps:
+  - intent: calc_rectangle_area
+  - action: action_ask_rectangle_sides
+
+- rule: ask cube side when user wants cube volume
+  steps:
+  - intent: calc_cube_volume
+  - action: action_ask_cube_side
+
+- rule: ask sphere radius when user wants sphere volume
+  steps:
+  - intent: calc_sphere_volume
+  - action: action_ask_sphere_radius
+
+- rule: ask cone params when user wants cone volume
+  steps:
+  - intent: calc_cone_volume
+  - action: action_ask_cone_params
+
+- rule: ask cylinder params when user wants cylinder volume
+  steps:
+  - intent: calc_cylinder_volume
+  - action: action_ask_cylinder_params
+
+- rule: handle measurements for pending calc
+  steps:
+  - intent: inform_measurements
+  - action: action_handle_measurements
