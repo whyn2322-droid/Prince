@@ -1,0 +1,45 @@
+#### This file contains tests to evaluate that your bot behaves as expected.
+
+stories:
+- story: greet and happy
+  steps:
+  - user: |
+      сайн байна уу
+    intent: greet
+  - action: utter_greet
+  - user: |
+      их гоё байна
+    intent: mood_great
+  - action: utter_happy
+
+- story: ask services
+  steps:
+  - user: |
+      ямар үйлчилгээ үзүүлдэг вэ
+    intent: ask_services
+  - action: utter_services
+
+- story: ask price then thanks
+  steps:
+  - user: |
+      үнэ хэд вэ
+    intent: ask_price
+  - action: utter_price
+  - user: |
+      баярлалаа
+    intent: thanks
+  - action: utter_thanks
+
+- story: say goodbye
+  steps:
+  - user: |
+      баяртай
+    intent: goodbye
+  - action: utter_goodbye
+
+- story: bot challenge
+  steps:
+  - user: |
+      чи бот уу
+    intent: bot_challenge
+  - action: utter_iamabot

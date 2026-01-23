@@ -1,0 +1,39 @@
+version: "3.1"
+
+stories:
+
+- story: greet and ask services
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_services
+  - action: utter_services
+
+- story: ask price then thanks
+  steps:
+  - intent: ask_price
+  - action: utter_price
+  - intent: thanks
+  - action: utter_thanks
+
+- story: mood happy path
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_great
+  - action: utter_happy
+
+- story: mood unhappy path
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: affirm
+  - action: utter_happy
+
+- story: solve word problem
+  steps:
+  - intent: solve_word_problem
+  - action: action_solve_word_problem
