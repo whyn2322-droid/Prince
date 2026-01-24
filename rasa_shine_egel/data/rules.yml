@@ -1,0 +1,63 @@
+version: "3.1"
+
+rules:
+
+- rule: Greet anytime the user says hello
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say thanks response
+  steps:
+  - intent: thanks
+  - action: utter_thanks
+
+- rule: Provide help
+  steps:
+  - intent: ask_help
+  - action: utter_help
+
+- rule: Provide services info
+  steps:
+  - intent: ask_services
+  - action: utter_services
+
+- rule: Provide hours info
+  steps:
+  - intent: ask_hours
+  - action: utter_hours
+
+- rule: Provide location info
+  steps:
+  - intent: ask_location
+  - action: utter_location
+
+- rule: Provide contact info
+  steps:
+  - intent: ask_contact
+  - action: utter_contact
+
+- rule: Provide price info
+  steps:
+  - intent: ask_price
+  - action: utter_price
+
+- rule: Say bot info
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: Solve word problems
+  steps:
+  - intent: solve_word_problem
+  - action: action_solve_word_problem
+
+- rule: Fallback
+  steps:
+  - intent: nlu_fallback
+  - action: action_llm_response

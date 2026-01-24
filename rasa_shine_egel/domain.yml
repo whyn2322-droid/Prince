@@ -1,0 +1,69 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - ask_services
+  - ask_hours
+  - ask_location
+  - ask_contact
+  - ask_price
+  - thanks
+  - ask_help
+  - solve_word_problem
+
+actions:
+  - action_llm_response
+  - action_solve_word_problem
+
+responses:
+  utter_greet:
+  - text: "Сайн байна уу! Танд яаж туслах вэ?"
+
+  utter_cheer_up:
+  - text: "Санаа зоволтгүй, би танд тусалж чадна. Юу болсон бэ?"
+
+  utter_did_that_help:
+  - text: "Тус болсон уу?"
+
+  utter_happy:
+  - text: "Сайн байна! Үргэлжлүүлье."
+
+  utter_goodbye:
+  - text: "Баяртай! Дахин уулзъя."
+
+  utter_iamabot:
+  - text: "Би Rasa дээр ажилладаг чатбот."
+
+  utter_services:
+  - text: "Би үйлчилгээ, үнэ, цаг, байршил, холбоо барих мэдээлэл өгч чадна."
+
+  utter_hours:
+  - text: "Ажлын цаг: Даваа–Баасан 09:00–18:00, Бямба 10:00–16:00. (Хэрвээ өөр бол энд засна уу)"
+
+  utter_location:
+  - text: "Байршил: Хот, дүүрэг, хаягаа энд бичнэ үү."
+
+  utter_contact:
+  - text: "Холбоо барих: +976 0000 0000, info@example.mn (жишээ)."
+
+  utter_price:
+  - text: "Үнэ нь үйлчилгээ/бүтээгдэхүүнээс хамаарна. Яг юуг сонирхож байна вэ?"
+
+  utter_thanks:
+  - text: "Баярлалаа! Дахин асуух зүйл байвал хэлээрэй."
+
+  utter_help:
+  - text: "Та дараах асуултуудыг асууж болно: үйлчилгээ, үнэ, цаг, байршил, холбоо барих."
+
+  utter_fallback:
+  - text: "Уучлаарай, би бүрэн ойлгосонгүй. Өөрөөр тайлбарлаж өгнө үү."
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

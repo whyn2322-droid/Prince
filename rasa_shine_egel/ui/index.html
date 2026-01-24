@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Assistant Desktop UI</title>
+    <link rel="stylesheet" href="styles.css?v=20260124" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="bg">
+      <div class="radial"></div>
+      <div class="grid"></div>
+    </div>
+
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo">AI</div>
+          <div class="brand-text">
+            <span class="title">Rasa Shine</span>
+            <span class="sub">Desktop Assistant</span>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-item active">Chat</button>
+          <button class="nav-item">History</button>
+          <button class="nav-item">Settings</button>
+        </nav>
+
+        <div class="quick">
+          <div class="quick-title">Examples</div>
+          <button class="pill" data-message="Бодлого бодоод өг">Бодлого бодоод өг</button>
+          <button class="pill" data-message="Товч тайлбарла">Товч тайлбарла</button>
+        </div>
+
+        <div class="profile">
+          <div class="avatar">MN</div>
+          <div class="profile-text">
+            <div class="name">User</div>
+            <div class="status">Online</div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <div class="eyebrow">AI Assistant</div>
+            <h1>Desktop Chat</h1>
+            <p class="hero-text">Rasa REST channel-д холбогдсон.</p>
+          </div>
+          <div class="status-pill" id="status-pill">Disconnected</div>
+        </header>
+
+        <section class="chat">
+          <div class="chat-header">
+            <div class="dot"></div>
+            <div class="chat-title">Session: Main</div>
+          </div>
+
+          <div class="messages" id="messages">
+            <div class="message assistant">
+              <div class="bubble">
+                Сайн байна уу! Бодлого эсвэл асуултаа бичнэ үү.
+              </div>
+              <div class="meta">Assistant · 09:42</div>
+            </div>
+          </div>
+
+          <form class="composer" id="composer" data-endpoint="http://localhost:5005/webhooks/rest/webhook">
+            <input
+              id="composer-input"
+              type="text"
+              placeholder="Энд бичнэ үү..."
+              autocomplete="off"
+            />
+            <button type="submit" class="send">Send</button>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js?v=20260124"></script>
+  </body>
+</html>
