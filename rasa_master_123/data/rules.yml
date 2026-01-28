@@ -1,0 +1,434 @@
+version: '3.1'
+rules:
+- rule: Greet
+  steps:
+  - intent: greet
+  - action: utter_greet
+- rule: Goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+- rule: Activate perimeter form
+  steps:
+  - intent: request_perimeter
+  - action: perimeter_form
+  - active_loop: perimeter_form
+- rule: Submit perimeter form
+  condition:
+  - active_loop: perimeter_form
+  steps:
+  - action: perimeter_form
+  - active_loop: null
+  - action: action_calculate_perimeter
+- rule: Out of scope
+  steps:
+  - intent: out_of_scope
+  - action: action_handle_out_of_scope
+- rule: Greet
+  steps:
+  - intent: greet
+  - action: utter_greet
+- rule: Goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+- rule: Activate perimeter form
+  steps:
+  - intent: request_perimeter
+  - action: perimeter_form
+  - active_loop: perimeter_form
+- rule: Submit perimeter form
+  condition:
+  - active_loop: perimeter_form
+  steps:
+  - action: perimeter_form
+  - active_loop: null
+  - action: action_calculate_perimeter
+- rule: Out of scope
+  steps:
+  - intent: out_of_scope
+  - action: action_handle_out_of_scope
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+- rule: ask square side when user wants square area
+  steps:
+  - intent: calc_square_area
+  - action: action_ask_square_side
+- rule: ask rectangle sides when user wants rectangle area
+  steps:
+  - intent: calc_rectangle_area
+  - action: action_ask_rectangle_sides
+- rule: ask cube side when user wants cube volume
+  steps:
+  - intent: calc_cube_volume
+  - action: action_ask_cube_side
+- rule: ask sphere radius when user wants sphere volume
+  steps:
+  - intent: calc_sphere_volume
+  - action: action_ask_sphere_radius
+- rule: ask cone params when user wants cone volume
+  steps:
+  - intent: calc_cone_volume
+  - action: action_ask_cone_params
+- rule: ask cylinder params when user wants cylinder volume
+  steps:
+  - intent: calc_cylinder_volume
+  - action: action_ask_cylinder_params
+- rule: handle square area measurements
+  condition:
+  - slot_was_set:
+    - pending_calc: square_area
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform_measurements
+  - action: action_handle_measurements
+- rule: handle rectangle area measurements
+  condition:
+  - slot_was_set:
+    - pending_calc: rectangle_area
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform_measurements
+  - action: action_handle_measurements
+- rule: handle cube volume measurements
+  condition:
+  - slot_was_set:
+    - pending_calc: cube_volume
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform_measurements
+  - action: action_handle_measurements
+- rule: handle sphere volume measurements
+  condition:
+  - slot_was_set:
+    - pending_calc: sphere_volume
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform_measurements
+  - action: action_handle_measurements
+- rule: handle cone volume measurements
+  condition:
+  - slot_was_set:
+    - pending_calc: cone_volume
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform_measurements
+  - action: action_handle_measurements
+- rule: handle cylinder volume measurements
+  condition:
+  - slot_was_set:
+    - pending_calc: cylinder_volume
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform_measurements
+  - action: action_handle_measurements
+- rule: handle square area measurements from numbers
+  condition:
+  - slot_was_set:
+    - pending_calc: square_area
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform
+  - action: action_handle_measurements
+- rule: handle rectangle area measurements from numbers
+  condition:
+  - slot_was_set:
+    - pending_calc: rectangle_area
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform
+  - action: action_handle_measurements
+- rule: handle cube volume measurements from numbers
+  condition:
+  - slot_was_set:
+    - pending_calc: cube_volume
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform
+  - action: action_handle_measurements
+- rule: handle sphere volume measurements from numbers
+  condition:
+  - slot_was_set:
+    - pending_calc: sphere_volume
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform
+  - action: action_handle_measurements
+- rule: handle cone volume measurements from numbers
+  condition:
+  - slot_was_set:
+    - pending_calc: cone_volume
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform
+  - action: action_handle_measurements
+- rule: handle cylinder volume measurements from numbers
+  condition:
+  - slot_was_set:
+    - pending_calc: cylinder_volume
+  - slot_was_set:
+    - pending_topic: null
+  - active_loop: null
+  steps:
+  - intent: inform
+  - action: action_handle_measurements
+- rule: Greet
+  steps:
+  - intent: greet
+  - action: utter_greet
+- rule: Goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+- rule: Capabilities
+  steps:
+  - intent: ask_capabilities
+  - action: utter_capabilities
+- rule: Quadratic definition
+  steps:
+  - intent: ask_quadratic_definition
+  - action: utter_quadratic_definition
+- rule: Quadratic formula
+  steps:
+  - intent: ask_quadratic_formula
+  - action: utter_quadratic_formula
+- rule: Solve quadratic
+  steps:
+  - intent: solve_quadratic
+  - action: action_solve_quadratic
+- rule: Discriminant
+  steps:
+  - intent: ask_quadratic_discriminant
+  - action: action_discriminant
+- rule: Factoring or expand
+  steps:
+  - intent: ask_factoring
+  - action: action_factor_or_expand
+- rule: Similarity and scale
+  steps:
+  - intent: ask_similarity_scale
+  - action: action_similarity_scale
+- rule: Probability
+  steps:
+  - intent: ask_probability_basic
+  - action: action_probability
+- rule: Statistics
+  steps:
+  - intent: ask_statistics_basic
+  - action: action_statistics
+- rule: Trigonometry
+  steps:
+  - intent: ask_trigonometry_basic
+  - action: action_trigonometry
+- rule: Square roots
+  steps:
+  - intent: ask_square_basics
+  - action: action_square_roots
+- rule: Activate integral form
+  steps:
+  - intent: ask_integral
+  - action: integral_form
+  - active_loop: integral_form
+- rule: Submit integral form
+  condition:
+  - active_loop: integral_form
+  steps:
+  - action: integral_form
+  - active_loop: null
+  - action: action_integral
+- rule: Activate function analysis form
+  steps:
+  - intent: ask_function_analysis
+  - action: function_analysis_form
+  - active_loop: function_analysis_form
+- rule: Submit function analysis form
+  condition:
+  - active_loop: function_analysis_form
+  steps:
+  - action: function_analysis_form
+  - active_loop: null
+  - action: action_function_analysis
+- rule: Activate derivative form
+  steps:
+  - intent: ask_derivative
+  - action: derivative_form
+  - active_loop: derivative_form
+- rule: Submit derivative form
+  condition:
+  - active_loop: derivative_form
+  steps:
+  - action: derivative_form
+  - active_loop: null
+  - action: action_derivative
+- rule: Activate log form
+  steps:
+  - intent: ask_logarithm
+  - action: log_form
+  - active_loop: log_form
+- rule: Submit log form
+  condition:
+  - active_loop: log_form
+  steps:
+  - action: log_form
+  - active_loop: null
+  - action: action_logarithm
+- rule: Cone
+  steps:
+  - intent: ask_cone
+  - action: action_cone
+- rule: Sphere
+  steps:
+  - intent: ask_sphere
+  - action: action_sphere
+- rule: Out of scope
+  steps:
+  - intent: out_of_scope
+  - action: action_handle_out_of_scope
+- rule: NLU fallback
+  steps:
+  - intent: nlu_fallback
+  - action: action_handle_out_of_scope
+- rule: greet only when no form
+  condition:
+  - active_loop: null
+  steps:
+  - intent: greet
+  - action: utter_greet
+- rule: say goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+- rule: start math8 form
+  steps:
+  - intent: ask_math
+  - action: math8_form
+  - active_loop: math8_form
+- rule: choose topic starts form
+  steps:
+  - intent: choose_topic
+  - action: math8_form
+  - active_loop: math8_form
+- rule: fill numbers while math8 form
+  condition:
+  - active_loop: math8_form
+  steps:
+  - intent: inform
+  - action: math8_form
+  - active_loop: math8_form
+- rule: fill identity type while math8 form
+  condition:
+  - active_loop: math8_form
+  steps:
+  - intent: choose_identity_type
+  - action: math8_form
+  - active_loop: math8_form
+- rule: submit math8 form
+  condition:
+  - active_loop: math8_form
+  steps:
+  - action: math8_form
+  - active_loop: null
+  - action: action_calculate_math8
+  - action: action_reset_math8
+- rule: restart math8
+  steps:
+  - intent: restart_math
+  - action: action_reset_math8
+  - action: math8_form
+  - active_loop: math8_form
+- rule: Greet
+  steps:
+  - intent: greet
+  - action: utter_greet
+- rule: Goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+- rule: Capabilities
+  steps:
+  - intent: ask_capabilities
+  - action: utter_capabilities
+- rule: Quadratic definition
+  steps:
+  - intent: ask_quadratic_definition
+  - action: utter_quadratic_definition
+- rule: Quadratic formula
+  steps:
+  - intent: ask_quadratic_formula
+  - action: utter_quadratic_formula
+- rule: Solve quadratic
+  steps:
+  - intent: solve_quadratic
+  - action: action_solve_quadratic
+- rule: Discriminant
+  steps:
+  - intent: ask_quadratic_discriminant
+  - action: action_discriminant
+- rule: Factoring or expand
+  steps:
+  - intent: ask_factoring
+  - action: action_factor_or_expand
+- rule: Similarity and scale
+  steps:
+  - intent: ask_similarity_scale
+  - action: action_similarity_scale
+- rule: Probability
+  steps:
+  - intent: ask_probability_basic
+  - action: action_probability
+- rule: Statistics
+  steps:
+  - intent: ask_statistics_basic
+  - action: action_statistics
+- rule: Trigonometry
+  steps:
+  - intent: ask_trigonometry_basic
+  - action: action_trigonometry
+- rule: Square roots
+  steps:
+  - intent: ask_square_basics
+  - action: action_square_roots
+- rule: Cone
+  steps:
+  - intent: ask_cone
+  - action: action_cone
+- rule: Sphere
+  steps:
+  - intent: ask_sphere
+  - action: action_sphere
+- rule: Out of scope
+  steps:
+  - intent: out_of_scope
+  - action: action_handle_out_of_scope
+- rule: NLU fallback
+  steps:
+  - intent: nlu_fallback
+  - action: action_handle_out_of_scope
