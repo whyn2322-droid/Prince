@@ -1,0 +1,74 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - Сайн уу
+      - Сайн байна уу
+      - Өдрийн мэнд
+      - Мэнд
+      - Сайн уу бот
+  - intent: goodbye
+    examples: |
+      - Баяртай
+      - За баяртай
+      - Дараа уулзъя
+      - Баярлалаа, баяртай
+  - intent: request_perimeter
+    examples: |
+      - Дүрсний хүрээний уртыг бодоод өг
+      - Хүрээ ол
+      - Периметр бод
+      - [тойрог](shape)-ийн хүрээ
+      - [тэгш өнцөгт](shape) хүрээ ол
+      - [дөрвөлжин](shape) хүрээ
+      - [гурвалжин](shape) хүрээ
+      - [тойрог](shape) 5-ийн хүрээ
+      - [тэгш өнцөгт](shape) 5 3 хүрээ
+  - intent: inform
+    examples: |
+      - [тойрог](shape)
+      - [дугуй](shape)
+      - [тэгш өнцөгт](shape)
+      - [дөрвөлжин](shape)
+      - [квадрат](shape)
+      - [гурвалжин](shape)
+      - 5
+      - 7.5
+      - 10 см
+      - радиус 8
+      - урт 5 өргөн 3
+      - a тал 3
+  - intent: affirm
+    examples: |
+      - тийм
+      - зөв
+      - болно
+  - intent: deny
+    examples: |
+      - үгүй
+      - биш
+      - хэрэггүй
+  - intent: out_of_scope
+    examples: |
+      - цаг хэд болж байна
+      - дуул
+      - зураг явуул
+
+  - synonym: circle
+    examples: |
+      - тойрог
+      - тойргийн
+      - дугуй
+  - synonym: rectangle
+    examples: |
+      - тэгш өнцөгт
+      - тэгш өнцөгтийн
+  - synonym: square
+    examples: |
+      - дөрвөлжин
+      - квадрат
+  - synonym: triangle
+    examples: |
+      - гурвалжин
+      - гурвалжны
