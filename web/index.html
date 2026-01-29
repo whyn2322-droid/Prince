@@ -1,0 +1,169 @@
+﻿<!doctype html>
+<html lang="mn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MathBot - Математик бодлого боддог чатбот</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">M</div>
+          <div>
+            <div class="brand-title">MathBot</div>
+            <div class="brand-sub">Математик бодлого боддог чатбот</div>
+          </div>
+        </div>
+        <div class="server card">
+          <label for="serverUrl">Серверийн хаяг</label>
+          <input id="serverUrl" type="url" placeholder="http://localhost:5005" />
+          <button id="saveServer" class="ghost">Хадгалах</button>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-content">
+          <div class="eyebrow">Математик бодлого боддог</div>
+          <h1>чатбот MathBot</h1>
+          <p>
+            Математикийн хичээлийн бодлогуудыг бодож, алхам алхмаар тайлбарлаж,
+            сурахад тань тусална.
+          </p>
+          <div class="hero-actions">
+            <a class="primary" href="#chat">Бодлого бодъё</a>
+            <div class="hero-chip">1-10-р анги</div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-card">
+            <div class="hero-card-header">
+              <div class="hero-card-title">Math AI</div>
+              <div class="hero-card-sub">Математик туслах</div>
+            </div>
+            <svg class="bot-graphic" viewBox="0 0 280 220" role="img" aria-label="MathBot">
+              <defs>
+                <linearGradient id="panel" x1="0" x2="1" y1="0" y2="1">
+                  <stop offset="0" stop-color="#5b74ff" />
+                  <stop offset="1" stop-color="#8bb6ff" />
+                </linearGradient>
+                <linearGradient id="bot" x1="0" x2="1" y1="0" y2="1">
+                  <stop offset="0" stop-color="#e8f0ff" />
+                  <stop offset="1" stop-color="#ffffff" />
+                </linearGradient>
+              </defs>
+              <rect x="12" y="12" width="256" height="196" rx="28" fill="url(#panel)" />
+              <rect x="62" y="52" width="156" height="110" rx="24" fill="url(#bot)" />
+              <circle cx="110" cy="106" r="12" fill="#4b63ff" />
+              <circle cx="170" cy="106" r="12" fill="#4b63ff" />
+              <rect x="118" y="130" width="44" height="10" rx="5" fill="#c7d2fe" />
+              <rect x="88" y="160" width="104" height="28" rx="14" fill="#3f57e8" opacity="0.9" />
+              <text x="140" y="179" text-anchor="middle" font-size="14" fill="#ffffff" font-family="Rubik, sans-serif">
+                MATH AI
+              </text>
+              <rect x="40" y="32" width="36" height="26" rx="8" fill="#3f57e8" opacity="0.85" />
+              <rect x="204" y="32" width="36" height="26" rx="8" fill="#3f57e8" opacity="0.85" />
+            </svg>
+            <div class="hero-card-action">Бодлогыг бодъё</div>
+          </div>
+          <div class="floating-note">
+            12x^2 - 2x + 10 = 0
+            <span>дискриминант олоорой</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="main-grid">
+        <section id="chat" class="chat card">
+          <div class="chat-header">
+            <div class="status">
+              <span class="dot"></span>
+              <span id="statusText">Салсан</span>
+            </div>
+            <div class="tips">
+              Жишээ: "2/3 + 4/5", "Тойргийн талбай", "36-г задлах"
+            </div>
+          </div>
+
+          <div id="messages" class="messages" aria-live="polite"></div>
+
+          <div id="quickReplies" class="quick-replies">
+            <button class="chip" data-text="Solve 12 * 7">12 * 7</button>
+            <button class="chip" data-text="Simplify 3/9">3/9-ийг хялбарчил</button>
+            <button class="chip" data-text="Find 25% of 80">80-ийн 25%</button>
+            <button class="chip" data-text="Equation: 2x + 5 = 17">Тэгшитгэл: 2x + 5 = 17</button>
+          </div>
+
+          <form id="composer" class="composer" autocomplete="off">
+            <input
+              id="messageInput"
+              type="text"
+              placeholder="Асуултаа бичнэ үү..."
+              aria-label="Message"
+              required
+            />
+            <button id="sendBtn" type="submit">Илгээх</button>
+          </form>
+        </section>
+
+        <aside class="side-stack">
+          <div class="feature-card card">
+            <div class="feature-body">
+              <h2>MathBot юу хийж чадна вэ?</h2>
+              <ul>
+                <li>Хүрээ, талбай, эзэлхүүн бодно</li>
+                <li>Бутархай, хувь, харьцаа бодно</li>
+                <li>10-р анги хүртэлх бодлого бодно</li>
+              </ul>
+            </div>
+            <div class="feature-visual">
+              <svg class="bot-mini" viewBox="0 0 220 180" role="img" aria-label="MathBot">
+                <defs>
+                  <linearGradient id="panelMini" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#4f67ff" />
+                    <stop offset="1" stop-color="#8bb6ff" />
+                  </linearGradient>
+                </defs>
+                <rect x="20" y="20" width="180" height="140" rx="24" fill="url(#panelMini)" />
+                <rect x="60" y="60" width="100" height="70" rx="18" fill="#eef2ff" />
+                <circle cx="90" cy="95" r="10" fill="#4b63ff" />
+                <circle cx="130" cy="95" r="10" fill="#4b63ff" />
+                <rect x="96" y="112" width="28" height="8" rx="4" fill="#c7d2fe" />
+              </svg>
+              <div class="feature-badge">MATH AI</div>
+            </div>
+          </div>
+
+          <div class="panel-card card">
+            <h2>Локал дээр ажиллуулах</h2>
+            <p>Rasa сервер болон actions-аа асаагаад энэ хуудсыг нээнэ.</p>
+            <pre>
+cd c:\rasa_master_flat
+rasa run --enable-api --cors "*"
+# өөр терминал
+rasa run actions
+            </pre>
+          </div>
+
+          <div class="panel-card card">
+            <h2>Зөвлөмж</h2>
+            <p>
+              "3x + 4 = 19" шийд, эсвэл "5x7 тэгш өнцөгтийн периметр" гэх мэт
+              тодорхой асуулт асуугаарай.
+            </p>
+          </div>
+        </aside>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+
