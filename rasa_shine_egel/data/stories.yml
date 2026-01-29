@@ -36,4 +36,4 @@ stories:
 - story: solve word problem
   steps:
   - intent: solve_word_problem
-  - action: action_solve_word_problem
+  - action: action_math_proxy

@@ -49,6 +49,25 @@ GEMINI_API_URL = os.getenv(
 )
 GEMINI_TIMEOUT = float(os.getenv("GEMINI_TIMEOUT", "20"))
 
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+MISTRAL_MODEL = os.getenv("MISTRAL_MODEL", "mistral-small-latest")
+MISTRAL_API_URL = os.getenv(
+    "MISTRAL_API_URL", "https://api.mistral.ai/v1/chat/completions"
+)
+MISTRAL_TIMEOUT = float(os.getenv("MISTRAL_TIMEOUT", "20"))
+MISTRAL_MAX_TOKENS = int(os.getenv("MISTRAL_MAX_TOKENS", "300"))
+MISTRAL_TEMPERATURE = float(os.getenv("MISTRAL_TEMPERATURE", "0.2"))
+
+AICC_API_KEY = os.getenv("AICC_API_KEY")
+AICC_MODEL = os.getenv("AICC_MODEL", "gpt-4o-mini")
+AICC_BASE_URL = os.getenv("AICC_BASE_URL", "https://api.ai.cc/v1")
+AICC_TIMEOUT = float(os.getenv("AICC_TIMEOUT", "20"))
+AICC_MAX_TOKENS = int(os.getenv("AICC_MAX_TOKENS", "300"))
+AICC_TEMPERATURE = float(os.getenv("AICC_TEMPERATURE", "0.2"))
+
+MATHBOT_URL = os.getenv("MATHBOT_URL", "http://localhost:5005")
+MATHBOT_TIMEOUT = float(os.getenv("MATHBOT_TIMEOUT", "10"))
+
 SYSTEM_PROMPT = os.getenv(
     "OPENAI_SYSTEM_PROMPT",
     """
@@ -128,6 +147,109 @@ def _extract_gemini_text(data: Dict[str, Any]) -> Optional[str]:
     return None
 
 
+def _build_openai_chat_messages(history: List[Tuple[str, str]]) -> List[Dict[str, str]]:
+    messages: List[Dict[str, str]] = [{"role": "system", "content": SYSTEM_PROMPT}]
+    for role, text in history:
+        chat_role = "assistant" if role == "assistant" else "user"
+        messages.append({"role": chat_role, "content": text})
+    return messages
+
+
+def _build_mistral_messages(history: List[Tuple[str, str]]) -> List[Dict[str, str]]:
+    return _build_openai_chat_messages(history)
+
+
+def _extract_mistral_text(data: Dict[str, Any]) -> Optional[str]:
+    choices = data.get("choices") or []
+    if not choices:
+        return None
+    message = choices[0].get("message") or {}
+    return message.get("content")
+
+
+def _safe_json(resp: requests.Response) -> Optional[Dict[str, Any]]:
+    try:
+        return resp.json()
+    except ValueError:
+        logger.error("Non-JSON response: %s", resp.text)
+        return None
+
+
+def _call_mathbot(message: str, sender_id: str = "api_bridge") -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
+    if not message:
+        return None, "empty_message"
+    base = MATHBOT_URL.rstrip("/")
+    url = f"{base}/webhooks/rest/webhook"
+    payload = {"sender": sender_id, "message": message}
+    try:
+        resp = requests.post(url, json=payload, timeout=MATHBOT_TIMEOUT)
+    except requests.RequestException as exc:
+        logger.error("MathBot request failed: %s", exc)
+        return None, "request_failed"
+    if resp.status_code >= 400:
+        logger.error("MathBot error %s: %s", resp.status_code, resp.text)
+        return None, f"status_{resp.status_code}"
+    try:
+        data = resp.json()
+    except ValueError:
+        logger.error("MathBot returned non-JSON: %s", resp.text)
+        return None, "invalid_json"
+    if not isinstance(data, list):
+        logger.error("MathBot returned unexpected payload: %s", data)
+        return None, "invalid_payload"
+    return data, None
+
+
+
+def _call_mistral(history: List[Tuple[str, str]]) -> Optional[str]:
+    if not MISTRAL_API_KEY:
+        return None
+    payload = {
+        "model": MISTRAL_MODEL,
+        "messages": _build_mistral_messages(history),
+        "max_tokens": MISTRAL_MAX_TOKENS,
+        "temperature": MISTRAL_TEMPERATURE,
+    }
+    headers = {
+        "Authorization": f"Bearer {MISTRAL_API_KEY}",
+        "Content-Type": "application/json",
+    }
+    resp = requests.post(
+        MISTRAL_API_URL, headers=headers, json=payload, timeout=MISTRAL_TIMEOUT
+    )
+    if resp.status_code >= 400:
+        logger.error("Mistral error %s: %s", resp.status_code, resp.text)
+        return None
+    data = _safe_json(resp)
+    if not data:
+        return None
+    return _extract_mistral_text(data)
+
+
+def _call_aicc(history: List[Tuple[str, str]]) -> Optional[str]:
+    if not AICC_API_KEY:
+        return None
+    payload = {
+        "model": AICC_MODEL,
+        "messages": _build_openai_chat_messages(history),
+        "max_tokens": AICC_MAX_TOKENS,
+        "temperature": AICC_TEMPERATURE,
+    }
+    url = f"{AICC_BASE_URL}/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {AICC_API_KEY}",
+        "Content-Type": "application/json",
+    }
+    resp = requests.post(url, headers=headers, json=payload, timeout=AICC_TIMEOUT)
+    if resp.status_code >= 400:
+        logger.error("AICC error %s: %s", resp.status_code, resp.text)
+        return None
+    data = _safe_json(resp)
+    if not data:
+        return None
+    return _extract_mistral_text(data)
+
+
 def _call_gemini(history: List[Tuple[str, str]]) -> Optional[str]:
     if not GEMINI_API_KEY:
         return None
@@ -141,7 +263,9 @@ def _call_gemini(history: List[Tuple[str, str]]) -> Optional[str]:
     if resp.status_code >= 400:
         logger.error("Gemini error %s: %s", resp.status_code, resp.text)
         return None
-    data = resp.json()
+    data = _safe_json(resp)
+    if not data:
+        return None
     return _extract_gemini_text(data)
 
 
@@ -166,7 +290,9 @@ def _call_openai(history: List[Tuple[str, str]]) -> Optional[str]:
     if resp.status_code >= 400:
         logger.error("OpenAI error %s: %s", resp.status_code, resp.text)
         return None
-    data = resp.json()
+    data = _safe_json(resp)
+    if not data:
+        return None
     return _extract_output_text(data)
 
 
@@ -180,39 +306,58 @@ class ActionLLMResponse(Action):
         tracker: Tracker,
         domain: Dict[str, Any],
     ) -> List[EventType]:
-        # First, try free local word-problem solver
-        text = tracker.latest_message.get("text", "")
-        answer = _solve_simple_word_problem(text)
-        if answer:
-            dispatcher.utter_message(text=answer)
-            return []
-
-        history = _collect_history(tracker)
-        if not history:
-            dispatcher.utter_message(text="Та асуултаа дахин бичнэ үү.")
-            return []
-
         try:
-            answer = _call_gemini(history)
-        except requests.RequestException as exc:
-            logger.exception("Gemini request failed: %s", exc)
-            answer = None
+            # First, try free local word-problem solver
+            text = tracker.latest_message.get("text", "")
+            answer = _solve_simple_word_problem(text)
+            if answer:
+                dispatcher.utter_message(text=answer)
+                return []
 
-        if not answer:
+            history = _collect_history(tracker)
+            if not history:
+                dispatcher.utter_message(text="Та асуултаа дахин бичнэ үү.")
+                return []
+
             try:
-                answer = _call_openai(history)
+                answer = _call_aicc(history)
             except requests.RequestException as exc:
-                logger.exception("OpenAI request failed: %s", exc)
+                logger.exception("AICC request failed: %s", exc)
                 answer = None
 
-        if not answer:
+            if not answer:
+                try:
+                    answer = _call_mistral(history)
+                except requests.RequestException as exc:
+                    logger.exception("Mistral request failed: %s", exc)
+                    answer = None
+            if not answer:
+                try:
+                    answer = _call_gemini(history)
+                except requests.RequestException as exc:
+                    logger.exception("Gemini request failed: %s", exc)
+                    answer = None
+            if not answer:
+                try:
+                    answer = _call_openai(history)
+                except requests.RequestException as exc:
+                    logger.exception("OpenAI request failed: %s", exc)
+                    answer = None
+
+            if not answer:
+                dispatcher.utter_message(
+                    text="Уучлаарай, одоогоор хариу үүсгэж чадсангүй. Дараа дахин оролдоорой."
+                )
+                return []
+
+            dispatcher.utter_message(text=answer)
+            return []
+        except Exception as exc:
+            logger.exception("ActionLLMResponse failed: %s", exc)
             dispatcher.utter_message(
-                text="Уучлаарай, одоогоор хариу үүсгэж чадсангүй. Дараа дахин оролдоорой."
+                text="Уучлаарай, дотоод алдаа гарлаа. Дараа дахин оролдоорой."
             )
             return []
-
-        dispatcher.utter_message(text=answer)
-        return []
 
 
 _ADD_WORDS = ("дахиад", "нэм", "нийт", "нийлбэр", "нэмж", "болоод")
@@ -356,6 +501,38 @@ def _solve_simple_word_problem(text: str) -> Optional[str]:
     return f"{'; '.join(explanation)}. Нийт: {result_str}"
 
 
+
+class ActionMathProxy(Action):
+    def name(self) -> str:
+        return "action_math_proxy"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[str, Any],
+    ) -> List[EventType]:
+        message = tracker.latest_message.get("text", "").strip()
+        if not message:
+            dispatcher.utter_message(text="Please enter a message.")
+            return []
+
+        responses, error = _call_mathbot(message)
+        if error or not responses:
+            dispatcher.utter_message(
+                text="Math service is unavailable. Please try again later."
+            )
+            return []
+
+        for item in responses:
+            text = item.get("text")
+            image = item.get("image")
+            if text:
+                dispatcher.utter_message(text=text)
+            if image:
+                dispatcher.utter_message(image=image)
+        return []
+
 class ActionSolveWordProblem(Action):
     def name(self) -> str:
         return "action_solve_word_problem"
@@ -366,35 +543,55 @@ class ActionSolveWordProblem(Action):
         tracker: Tracker,
         domain: Dict[str, Any],
     ) -> List[EventType]:
-        history = _collect_history(tracker)
-        if not history:
-            dispatcher.utter_message(text="Та асуултаа дахин бичнэ үү.")
-            return []
-
-        # Prefer API-based reasoning when available
-        answer = None
         try:
-            answer = _call_gemini(history)
-        except requests.RequestException as exc:
-            logger.exception("Gemini request failed: %s", exc)
+            history = _collect_history(tracker)
+            if not history:
+                dispatcher.utter_message(text="Та асуултаа дахин бичнэ үү.")
+                return []
+
+            # Prefer API-based reasoning when available
             answer = None
-
-        if not answer:
-            text = tracker.latest_message.get("text", "")
-            answer = _solve_simple_word_problem(text)
-
-        if not answer:
             try:
-                answer = _call_openai(history)
+                answer = _call_aicc(history)
             except requests.RequestException as exc:
-                logger.exception("OpenAI request failed: %s", exc)
+                logger.exception("AICC request failed: %s", exc)
                 answer = None
 
-        if not answer:
+            if not answer:
+                try:
+                    answer = _call_mistral(history)
+                except requests.RequestException as exc:
+                    logger.exception("Mistral request failed: %s", exc)
+                    answer = None
+
+            if not answer:
+                text = tracker.latest_message.get("text", "")
+                answer = _solve_simple_word_problem(text)
+
+            if not answer:
+                try:
+                    answer = _call_gemini(history)
+                except requests.RequestException as exc:
+                    logger.exception("Gemini request failed: %s", exc)
+                    answer = None
+            if not answer:
+                try:
+                    answer = _call_openai(history)
+                except requests.RequestException as exc:
+                    logger.exception("OpenAI request failed: %s", exc)
+                    answer = None
+
+            if not answer:
+                dispatcher.utter_message(
+                    text="Тоонуудыг олж чадсангүй. Бодлогоо арай тодорхой бичээд өгнө үү."
+                )
+                return []
+
+            dispatcher.utter_message(text=answer)
+            return []
+        except Exception as exc:
+            logger.exception("ActionSolveWordProblem failed: %s", exc)
             dispatcher.utter_message(
-                text="Тоонуудыг олж чадсангүй. Бодлогоо арай тодорхой бичээд өгнө үү."
+                text="Уучлаарай, дотоод алдаа гарлаа. Дараа дахин оролдоорой."
             )
             return []
-
-        dispatcher.utter_message(text=answer)
-        return []

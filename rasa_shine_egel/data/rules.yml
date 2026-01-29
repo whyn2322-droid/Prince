@@ -55,9 +55,14 @@ rules:
 - rule: Solve word problems
   steps:
   - intent: solve_word_problem
-  - action: action_solve_word_problem
+  - action: action_math_proxy
 
 - rule: Fallback
   steps:
   - intent: nlu_fallback
-  - action: action_llm_response
+  - action: action_math_proxy
+
+- rule: Handle king questions
+  steps:
+  - intent: ask_king
+  - action: utter_ask_king

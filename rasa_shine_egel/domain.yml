@@ -11,6 +11,7 @@ intents:
   - ask_services
   - ask_hours
   - ask_location
+  - ask_king
   - ask_contact
   - ask_price
   - thanks
@@ -21,6 +22,7 @@ actions:
   - action_llm_response
   - action_solve_word_problem
 
+  - action_math_proxy
 responses:
   utter_greet:
   - text: "Сайн байна уу! Танд яаж туслах вэ?"
@@ -48,6 +50,9 @@ responses:
 
   utter_location:
   - text: "Байршил: Хот, дүүрэг, хаягаа энд бичнэ үү."
+
+  utter_ask_king:
+  - text: "Уучлаарай, энэ бот хаадын тухай мэдээлэл өгөхгүй. Математикийн асуулт асуугаарай."
 
   utter_contact:
   - text: "Холбоо барих: +976 0000 0000, info@example.mn (жишээ)."
