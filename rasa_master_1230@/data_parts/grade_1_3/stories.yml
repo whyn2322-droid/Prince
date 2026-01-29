@@ -1,0 +1,14 @@
+version: "3.1"
+
+stories:
+  - story: greet
+    steps:
+      - intent: greet
+      - action: utter_greet
+  - story: calculate perimeter
+    steps:
+      - intent: request_perimeter
+      - action: perimeter_form
+      - active_loop: perimeter_form
+      - active_loop: null
+      - action: action_calculate_perimeter
